@@ -1,0 +1,4 @@
+Settings[Keys.Host] = "nancyfx.org";
+Settings[DocsKeys.Title] = "Nancy";
+Settings[DocsKeys.Logo] = "/assets/img/logo.png";
+FileSystem.InputPaths.Add("common");
