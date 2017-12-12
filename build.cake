@@ -1,14 +1,25 @@
+// The following environment variables need to be set for Publish target:
+// NANCY_NETLIFY_TOKEN
+
 #tool "nuget:https://api.nuget.org/v3/index.json?package=Wyam&version=1.1.0"
 #addin "nuget:https://api.nuget.org/v3/index.json?package=Cake.Wyam&version=1.1.0"
 #addin "nuget:https://api.nuget.org/v3/index.json?package=Octokit&version=0.28.0"
+#addin "nuget:https://api.nuget.org/v3/index.json?package=NetlifySharp"
+#addin "nuget:https://api.nuget.org/v3/index.json?package=Newtonsoft.Json"
+#addin "nuget:https://api.nuget.org/v3/index.json?package=System.Runtime.Serialization.Formatters"
 
 using Octokit;
+using NetlifySharp;
+using NetlifySharp.Models;
 
 //////////////////////////////////////////////////////////////////////
 // ARGUMENTS
 //////////////////////////////////////////////////////////////////////
 
 var target = Argument("target", "Default");
+var force = Argument("force", false);
+var tagArgument = Argument<string>("tag", null);
+RepositoryTag tag = null;
 
 //////////////////////////////////////////////////////////////////////
 // PREPARATION
@@ -25,7 +36,29 @@ var versionsDir         = Directory("./versions");  // contains built version ou
 var outputDir           = Directory("./output");
 
 // Define variables
+List<RepositoryTag> allTags = new List<RepositoryTag>();
 List<RepositoryTag> tags = new List<RepositoryTag>();
+
+///////////////////////////////////////////////////////////////////////////////
+// SETUP / TEARDOWN
+///////////////////////////////////////////////////////////////////////////////
+
+Setup(context =>
+{
+    if(tagArgument == null)
+    {
+        Information("Processing all tags");
+    }
+    else
+    {
+        Information($"Processing tag {tagArgument}");
+    }
+    
+    if(force)
+    {
+        Information("Force is true");
+    }
+});
 
 //////////////////////////////////////////////////////////////////////
 // TASKS
@@ -41,7 +74,21 @@ Task("GetTags")
         {
             github.Credentials = new Credentials(accessToken);
         }
-        tags = github.Repository.GetAllTags("NancyFx", "Nancy").Result.ToList();
+        allTags = github.Repository.GetAllTags("NancyFx", "Nancy").Result.ToList();
+
+        // Try to match the tag argument if one was specified
+        if(tagArgument != null)
+        {        
+            tags = allTags.Where(x => x.Name == tagArgument).ToList();
+            if(tags.Count != 1)
+            {
+                throw new ArgumentException($"Could not find tag {tagArgument}");
+            }        
+        }
+        else
+        {
+            tags = allTags;
+        }
     });
 
 Task("GetSource")
@@ -50,25 +97,36 @@ Task("GetSource")
     {
         foreach(RepositoryTag tag in tags)
         {   
+            Information($"Getting source code for tag {tag.Name}");
+
             // We only need to get source for releases that haven't been built yet 
             var releaseDir = releasesDir + Directory(tag.Name); 
             var versionDir = versionsDir + Directory(tag.Name);     
             if(DirectoryExists(releaseDir))
             {   
-                Information($"Skipping version {tag.Name}, source already downloaded");
-                continue;
+                if(force)
+                {
+                    DeleteDirectory(releaseDir, new DeleteDirectorySettings
+                    {
+                        Force = true,
+                        Recursive = true
+                    });
+                }
+                else
+                {
+                    Information($"Skipping tag {tag.Name}, source already downloaded");
+                    continue;
+                }
             }  
-            if(DirectoryExists(versionDir))
+            if(DirectoryExists(versionDir) && !force)
             {   
-                Information($"Skipping version {tag.Name}, docs already built");
+                Information($"Skipping tag {tag.Name}, docs already built");
                 continue;
             }
 
             Information($"Downloading source for {tag.Name}");                         
             FilePath releaseZip = DownloadFile(tag.ZipballUrl);
             Unzip(releaseZip, releaseDir);
-
-            break;
         }
     });
 
@@ -78,17 +136,19 @@ Task("BuildApiDocs")
     {
         foreach(RepositoryTag tag in tags)
         {    
+            Information($"Building API docs for tag {tag.Name}");
+
             // Ensure we have source and haven't already built the API docs
             var releaseDir = releasesDir + Directory(tag.Name); 
             var versionDir = versionsDir + Directory(tag.Name);   
             if(!DirectoryExists(releaseDir))
             {
-                Information($"Skipping version {tag.Name}, no release source available");
+                Information($"Skipping tag {tag.Name}, no release source available");
                 continue;
             }
-            if(DirectoryExists(versionDir))
+            if(DirectoryExists(versionDir) && !force)
             {
-                Information($"Skipping version {tag.Name}, API docs already built");
+                Information($"Skipping tag {tag.Name}, API docs already built");
                 continue;
             }
 
@@ -102,20 +162,68 @@ Task("BuildApiDocs")
             //    OutputPath = versionDir,                
             //    Settings = new Dictionary<string, object>
             //    {
-            //        { "SourceFiles",  MakeAbsolute(releaseDir).ToString() + "/*/src/**/*.cs" },
-            //        { "ApiPath", $"api/{tag.Name}" }
+            //        { "SourceFiles",  MakeAbsolute(releaseDir).ToString() + "/*/src/**/*.cs" }
             //    }
             //});            
 
             // Can remove once new version out
             StartProcess("../Wyam/src/clients/Wyam/bin/Debug/net462/wyam.exe",
                 "-a \"../Wyam/src/**/bin/Debug/**/*.dll\" -r \"docs -i\" -t \"../Wyam/themes/Docs/Samson\""
-                + $" --setting SourceFiles=\"{MakeAbsolute(releaseDir).ToString()}/*/src/**/*.cs\""
-                + $" --setting ApiPath=\"api/{tag.Name}\""
+                + $" --setting SourceFiles=\"{MakeAbsolute(releaseDir).ToString()}/*/src/{{*,!*.Tests}}/**/*.cs\""
                 + $" --config \"api.wyam\""
                 + $" --output \"{MakeAbsolute(versionDir).ToString()}\"");
         }
     });
+
+Task("UploadApiDocs")
+    .IsDependentOn("GetTags")
+    .Does(() =>
+    {
+        var netlifyToken = EnvironmentVariable("NANCY_NETLIFY_TOKEN");
+        var client = new NetlifyClient(netlifyToken);
+        client.RequestHandler = x =>
+        {
+            Verbose($"{x.Method.Method} {x.RequestUri}");
+        };
+        var sites = client.ListSites().SendAsync().Result;
+        Information("Got existing sites");
+
+        foreach(RepositoryTag tag in tags)
+        {           
+            Information($"Uploading API docs for tag {tag.Name}");
+
+            // Make sure we've actually built the docs
+            var versionDir = versionsDir + Directory(tag.Name);
+            if(!DirectoryExists(versionDir))
+            {
+                Information($"Skipping tag {tag.Name}, API docs have not been built");
+                continue;
+            }
+
+            // Check if the site exists
+            var siteName = $"nancy-api-{tag.Name.Replace(".", "-")}";
+            Site site = sites.FirstOrDefault(x => x.Name == siteName);
+            if(site != null && !force)
+            {
+                Information($"Skipping tag {tag.Name}, API docs have already been uploaded");
+                continue;
+            }
+
+            // Create the site if it doesn't exist
+            if(site == null)
+            { 
+                Information($"Creating site {siteName}.netlify.com");
+                site = client.CreateSite(new SiteSetup(client)
+                {
+                    Name = siteName
+                }).SendAsync().Result;
+            }
+
+            // Upload the content
+            site.UpdateSite(MakeAbsolute(versionDir).FullPath).SendAsync().Wait();      
+            Information($"Uploaded {siteName}.netlify.com");
+        }
+    });    
 
 Task("BuildDocs")
     .Does(() =>
@@ -126,36 +234,6 @@ Task("BuildDocs")
             Theme = "Samson",
             UpdatePackages = true
         });
-    });
-
-Task("CopyApiDocs")
-    .IsDependentOn("GetTags")
-    .Does(() =>
-    {
-        // Make sure we've got an output folder
-        if(!DirectoryExists(outputDir))
-        {
-            throw new Exception("You must build the site before copying API docs");
-        }
-
-        foreach(RepositoryTag tag in tags)
-        {    
-            // Only copy if we have generated API docs and they don't already exist in the output
-            var versionDir = versionsDir + Directory(tag.Name);
-            var apiDir = outputDir + Directory("api") + Directory(tag.Name);
-            if(!DirectoryExists(versionDir))
-            {
-                Information($"Skipping version {tag.Name}, API docs have not been built");
-                continue;
-            }
-            if(DirectoryExists(apiDir))
-            {
-                Information($"Skipping version {tag.Name}, API docs have already been copied");
-                continue;
-            }
-
-            CopyDirectory(versionDir + Directory("api") + Directory(tag.Name), apiDir);
-        }
     });
 
 // Assumes Wyam source is local and at ../Wyam
@@ -177,11 +255,14 @@ Task("Preview")
 // TASK TARGETS
 //////////////////////////////////////////////////////////////////////
 
-Task("Build")
+Task("BuildApi")
     .IsDependentOn("GetSource")
     .IsDependentOn("BuildApiDocs")
-    .IsDependentOn("BuildDocs")
-    .IsDependentOn("CopyApiDocs");
+    .IsDependentOn("UploadApiDocs");
+
+Task("Build")
+    .IsDependentOn("BuildApi")
+    .IsDependentOn("BuildDocs");
     
 Task("Default")
     .IsDependentOn("Build");
@@ -190,7 +271,4 @@ Task("Default")
 // EXECUTION
 //////////////////////////////////////////////////////////////////////
 
-if (!StringComparer.OrdinalIgnoreCase.Equals(target, "Deploy"))
-{
-    RunTarget(target);
-}
+RunTarget(target);
