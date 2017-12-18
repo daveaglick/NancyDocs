@@ -7,6 +7,7 @@
 #addin "nuget:https://api.nuget.org/v3/index.json?package=NetlifySharp"
 #addin "nuget:https://api.nuget.org/v3/index.json?package=Newtonsoft.Json"
 #addin "nuget:https://api.nuget.org/v3/index.json?package=System.Runtime.Serialization.Formatters"
+#addin "nuget:https://api.nuget.org/v3/index.json?package=Cake.FileHelpers"
 
 using Octokit;
 using NetlifySharp;
@@ -130,8 +131,9 @@ Task("GetSource")
         }
     });
 
-Task("BuildApiDocs")
+Task("BuildApi")
     .IsDependentOn("GetTags")
+    .IsDependentOn("GetSource")
     .Does(() =>
     {
         foreach(RepositoryTag tag in tags)
@@ -163,6 +165,7 @@ Task("BuildApiDocs")
             //    Settings = new Dictionary<string, object>
             //    {
             //        { "SourceFiles",  MakeAbsolute(releaseDir).ToString() + "/*/src/**/*.cs" }
+            //        { "ApiPath", $"api/{tag.Name}" }
             //    }
             //});            
 
@@ -170,13 +173,15 @@ Task("BuildApiDocs")
             StartProcess("../Wyam/src/clients/Wyam/bin/Debug/net462/wyam.exe",
                 "-a \"../Wyam/src/**/bin/Debug/**/*.dll\" -r \"docs -i\" -t \"../Wyam/themes/Docs/Samson\""
                 + $" --setting SourceFiles=\"{MakeAbsolute(releaseDir).ToString()}/*/src/{{*,!*.Tests}}/**/*.cs\""
+                + $" --setting ApiPath=\"api/{tag.Name}\""
                 + $" --config \"api.wyam\""
-                + $" --output \"{MakeAbsolute(versionDir).ToString()}\"");
+                + $" --output \"{MakeAbsolute(versionDir).ToString()}\""
+                + $" -p");
         }
     });
 
-Task("UploadApiDocs")
-    .IsDependentOn("GetTags")
+Task("UploadApi")
+    .IsDependentOn("BuildApi")
     .Does(() =>
     {
         var netlifyToken = EnvironmentVariable("NANCY_NETLIFY_TOKEN");
@@ -226,14 +231,61 @@ Task("UploadApiDocs")
     });    
 
 Task("BuildDocs")
+    .IsDependentOn("GetTags")
     .Does(() =>
     {
+        // Build the docs
         Wyam(new WyamSettings
         {
             Recipe = "Docs",
             Theme = "Samson",
             UpdatePackages = true
         });
+
+        // Create the versions JSON file
+        FileWriteText(outputDir + File("versions.json"), "[" + string.Join(",", allTags.Select(x => "\"" + x.Name + "\"")) + "]");
+
+        // Create the version redirects
+        FileWriteText(outputDir + File("_redirects"), string.Join(Environment.NewLine, allTags.Select(x => $"/api/{x.Name}/* http://nancy-api-{x.Name.Replace(".", "-")}.netlify.com/api/{x.Name}/:splat 200")));
+    });
+
+Task("UploadDocs")
+    .IsDependentOn("BuildDocs")
+    .Does(() =>
+    {
+        var netlifyToken = EnvironmentVariable("NANCY_NETLIFY_TOKEN");
+        var client = new NetlifyClient(netlifyToken);
+        client.RequestHandler = x =>
+        {
+            Verbose($"{x.Method.Method} {x.RequestUri}");
+        };  
+        Information($"Uploading docs");
+
+        // Make sure we've actually built the docs
+        if(!DirectoryExists(outputDir))
+        {
+            Information($"Skipping, docs have not been built");
+            return;
+        }
+
+        // Check if the site exists        
+        var sites = client.ListSites().SendAsync().Result;
+        Information("Got existing sites");
+        Site site = sites.FirstOrDefault(x => x.Name == "nancy");
+
+        // Create the site if it doesn't exist
+        if(site == null)
+        { 
+            Information($"Creating site nancy.netlify.com");
+            site = client.CreateSite(new SiteSetup(client)
+            {
+                Name = "nancy"
+            }).SendAsync().Result;
+        }
+
+        // Upload the content
+        site.UpdateSite(MakeAbsolute(outputDir).FullPath).SendAsync().Wait();      
+        Information($"Uploaded nancy.netlify.com");
     });
 
 // Assumes Wyam source is local and at ../Wyam
@@ -255,14 +307,13 @@ Task("Preview")
 // TASK TARGETS
 //////////////////////////////////////////////////////////////////////
 
-Task("BuildApi")
-    .IsDependentOn("GetSource")
-    .IsDependentOn("BuildApiDocs")
-    .IsDependentOn("UploadApiDocs");
-
 Task("Build")
     .IsDependentOn("BuildApi")
     .IsDependentOn("BuildDocs");
+
+Task("Upload")
+    .IsDependentOn("UploadApi")
+    .IsDependentOn("UploadDocs");
     
 Task("Default")
     .IsDependentOn("Build");
