@@ -175,8 +175,7 @@ Task("BuildApi")
                 + $" --setting SourceFiles=\"{MakeAbsolute(releaseDir).ToString()}/*/src/{{*,!*.Tests}}/**/*.cs\""
                 + $" --setting ApiPath=\"api/{tag.Name}\""
                 + $" --config \"api.wyam\""
-                + $" --output \"{MakeAbsolute(versionDir).ToString()}\""
-                + $" -p");
+                + $" --output \"{MakeAbsolute(versionDir).ToString()}\"");
         }
     });
 
@@ -245,8 +244,11 @@ Task("BuildDocs")
         // Create the versions JSON file
         FileWriteText(outputDir + File("versions.json"), "[" + string.Join(",", allTags.Select(x => "\"" + x.Name + "\"")) + "]");
 
-        // Create the version redirects
-        FileWriteText(outputDir + File("_redirects"), string.Join(Environment.NewLine, allTags.Select(x => $"/api/{x.Name}/* http://nancy-api-{x.Name.Replace(".", "-")}.netlify.com/api/{x.Name}/:splat 200")));
+        // Create the version redirects/rewrites
+        StringBuilder redirects = new StringBuilder();
+        redirects.AppendLine($"/api /api/{allTags.First().Name} 302");
+        redirects.AppendLine(string.Join(Environment.NewLine, allTags.Select(x => $"/api/{x.Name}/* http://nancy-api-{x.Name.Replace(".", "-")}.netlify.com/api/{x.Name}/:splat 200")));
+        FileWriteText(outputDir + File("_redirects"), redirects.ToString());
     });
 
 Task("UploadDocs")
@@ -299,8 +301,14 @@ Task("Debug")
 // Assumes Wyam source is local and at ../Wyam
 Task("Preview")
     .Does(() =>
-    {
-        StartProcess("../Wyam/src/clients/Wyam/bin/Debug/net462/wyam.exe", "preview");
+    {        
+        Wyam(new WyamSettings
+        {
+            Recipe = "Docs",
+            Theme = "Samson",
+            Preview = true,
+            Watch = true
+        });
     });
 
 //////////////////////////////////////////////////////////////////////

@@ -1,0 +1,55 @@
+@import "bootstrap/variables.less";
+@import "bootstrap/mixins.less";
+@import "adminlte/variables.less";
+@import "adminlte/mixins.less";
+
+body.layout-boxed {
+	background: url('/assets/img/crowd.jpg') no-repeat center center;
+	background-size: cover;
+}
+
+#versions option:disabled {
+    color: #ccc;
+}
+
+.jumbotron {
+	padding: 0;
+	color: #fff;
+	margin: 0;
+
+	h1, .h1 {
+		color: rgba(255,255,255,0.6);
+    }
+}
+
+.jumbotron-intro {	
+	background: #000;
+    
+    pre {
+        background-color: rgba(0,0,0,0.6);
+        border: none;
+        padding: 6px;
+        color: #fff;
+    }
+
+    #navigation {
+        display: block;
+        color: #fff;
+        float: right;
+        text-align: right;
+        list-style-type: none;
+        text-decoration: none;
+        font-size: 30px;
+        font-weight: bold;
+        
+        a, a:hover, a:visited {
+            color: #fff;
+            text-decoration: none;
+        }
+    }
+}
+
+.jumbotron-intro .container-background {
+	background: url('/assets/img/mic.jpg') no-repeat center center;
+	background-size: cover;
+}

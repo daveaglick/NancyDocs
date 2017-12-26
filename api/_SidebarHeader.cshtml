@@ -5,16 +5,35 @@
 <hr>
 
 <script>
-(function() {
-  $.ajax({
-      url: "/versions.json",
-      type: "GET",
-      dataType: "json",
-	  success: function( data ) {
-		$.each(data, function( i, item ) {
-			$("#versions").append('<option value="' + item + '">' + item + '</option>');
-		});
-	  }
-    })
-})();
+    (function() {    
+    var versionRegex = /(\/api\/(.*?)\/)/;
+    var currentVersion = versionRegex.exec(window.location.href)[2];
+    $('#versions').change(function () {
+        window.location = window.location.href.replace(versionRegex, '/api/' + $('#versions').find(":selected").text() + '/');
+        console.log($('#versions').find(":selected").text());
+    });  
+    $.ajax({
+        url: "/versions.json",
+        type: "GET",
+        dataType: "json",
+        success: function( data ) {
+            $.each(data, function( i, item ) {
+                if(item == currentVersion) {
+                    $("#versions").append('<option selected value="' + item + '">' + item + '</option>');
+                } else {
+                    $("#versions").append('<option value="' + item + '">' + item + '</option>');
+                    
+                    // Make sure the URL exists in this version
+                    $.ajax({
+                        type: 'HEAD',
+                        url: window.location.href.replace(versionRegex, '/api/' + item + '/'),
+                        error: function() {
+                            $('#versions option[value="' + item + '"]').attr('disabled', 'disabled');
+                        }
+                    });
+                }
+            });
+        }
+        })
+    })();
 </script> 
