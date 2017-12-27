@@ -62,7 +62,7 @@ You can also follow the discussion on Twitter using the [#NancyFx](http://twitte
 # Extensions
 
 ## Logging 
-- [[Nancy and New Relic]]
+- [Nancy and New Relic](/docs/nancy-and-new-relic)
 - [Nancy Elmah](https://github.com/creamdog/Nancy.Elmah) (Exception logging and viewing using [Elmah](https://code.google.com/p/elmah/))
 - [Nancy.Raygun](http://nuget.org/packages/Nancy.Raygun/) ([raygun.io](http://www.raygun.io) provider)
 - [Nancy.Serilog](https://github.com/Zaid-Ajaj/Nancy.Serilog) Serilog provider for application-wide logging
@@ -81,19 +81,19 @@ You can also follow the discussion on Twitter using the [#NancyFx](http://twitte
 - [SimpleAuthentication (Automatic Setup)](https://github.com/SimpleAuthentication/SimpleAuthentication/wiki/NancyFX-Automatic-Setup)
 
 ## Serialization
-- [[Extending Serialization with Converters]]
+- [Extending Serialization with Converters](/docs/using-models/extending-serialization-with-converters)
 
 ## Enhancements
 - [Nancy plugin for ReSharper](https://github.com/NancyFx/Nancy.ReSharper)
 
 ## Contributing
-* [[What can you help us out with]]
-* [[Getting the source code]]
-* [[Make sure line endings doesn't bite you]]
-* [[There are a couple of frameworks you should know about]]
-* [[Managing dependencies the right way]]
-* [[Git Workflow]]
-* [[Having trouble with rake?]]
+* [What can you help us out with](/docs/contributing/what-can-you-help-us-out-with)
+* [Getting the source code](/docs/contributing/getting-the-source-code)
+* [Make sure line endings doesn't bite you](/docs/contributing/make-sure-line-endings-doesnt-bite-you)
+* [There are a couple of frameworks you should know about](/docs/contributing/there-are-a-couple-of-frameworks-you-should-know-about)
+* [Managing dependencies the right way](/docs/contributing/managing-dependencies-the-right-way)
+* [Git Workflow](/docs/contributing/git-workflow)
+* [Having trouble with rake?](/docs/contributing/having-trouble-with-rake)
 * Coding styles (+ ReSharper file and test naming)
 * SharedAssemblyInfo.cs / Breaking all your projects on commit ;-)
 

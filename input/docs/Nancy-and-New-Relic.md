@@ -1,3 +1,7 @@
+Title: Nancy And New Relic
+ShowInSidebar: false
+---
+
 [New Relic](http://www.newrelic.com) is a nice tool used to monitor applications and collect performance metrics running on pretty much any platform, including .NET. Wiring up Nancy with [New Relic](http://www.newrelic.com) is a cinch! 
 
 Out of the box, the NewRelic agent traces all transactions as `NancyHttpHandler` - not very useful! But with the [.NET Agent API](https://docs.newrelic.com/docs/agents/net-agent/features/net-agent-api), it's possible to set an explicit identifier for each transaction logged.
