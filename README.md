@@ -1,4 +1,4 @@
-This repository builds the Nancy documentation. While the published version appears to be a single site, the Nancy docs are actually split into a single site for primary content and individual sites for each API version. This allows atomic publishing on platforms like Netlify for new versions without having to republish every individual version. The content site and the API version sites are combined using proxy settings from API URLs to each version site.
+This repository builds the Nancy documentation. While the published version appears to be a single site, the Nancy docs are actually split into a single site for primary content and individual sites for each API version. This allows atomic publishing on platforms like Netlify for new versions without having to republish every individual version. It also lets the main content be published on a more frequent schedule (I.e., by CI when PRs are merged) without having to update APIs that haven't changed. The content site and the API version sites are combined using proxy settings from API URLs to each version site.
 
 # Building
 
