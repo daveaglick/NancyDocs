@@ -1,3 +1,5 @@
+Order: 1
+---
 [Download PDF Document](https://github.com/erdomke/Innovator.Client/files/1080932/NancyPipeline.pdf)
 
 Here you can download a PDF document that charts the lifecycle of every Nancy application, from receiving the HTTP request to sending the HTTP response back to the client.  Relative to the [ASP.NET MVC Lifecycle](https://docs.microsoft.com/en-us/aspnet/mvc/overview/getting-started/lifecycle-of-an-aspnet-mvc-5-application), the Nancy appliction lifecycle is both fairly simple and highly extensible.  These extension points are documented in other wiki articles such as

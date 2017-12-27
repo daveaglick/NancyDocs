@@ -1,8 +1,10 @@
+Order: 2
+---
 The default serialization provided by Nancy for JSON data should in most instances automatically do the right thing. Reflection is used to obtain a list of data members in the object, and then each data member's value is converted to the correct type and assigned. If the data member's type is itself a class type, then the process is used, recursively, for that object as well.
 
 Sometimes, though, there might be circumstances when you need more than this simple algorithm to translate data.
 
-## Custom representation of class types
+# Custom representation of class types
 
 Consider, for instance, if your external interface had a requirement that a date needed to be specified as its individual components, year, month and day:
 
@@ -73,9 +75,9 @@ To perform the actual conversion, supply implementations of `Serialize` and `Des
 
 You can choose to do as much or as little conversion as you want. This sample, for instance, is pretty strict about the fields it expects to see; they must be `int` values. It is not strict about whether there are other fields present, though. A stricter implementation might refuse to translate a JSON object with extra properties, while a less strict implementation might accept and attempt to convert non-integer values. `JavaScriptConverter` allows you to tailor the serialization and deserialization processes to your exact needs.
 
-[[View Complete Sample Class|Sample JavaScriptConverter]]
+[View Complete Sample Class](/docs/using-models/sample-javascript-converter)
 
-## Custom representation of individual values
+# Custom representation of individual values
 
 There are some instances where you might want to control the conversion of an object directly to/from a primitive JSON value, rather than a JSON object. For instance, if your models include byte arrays, you might want to serialize these as Base 64 strings. The default serializer will read and write JSON text like `[72,101,108,108,111,44,32,119,111,114,108,100]`. The corresponding Base 64 representation of this is `SGVsbG8sIHdvcmxk`, which is significantly shorter and also faster to parse. You could simply declare the data field as a `string` in your model, but it is possible to make this conversion take place seamlessly during the serialization and deserialization processes using a `JavaScriptPrimitiveConverter`.
 
@@ -129,9 +131,9 @@ To perform the actual conversion, supply implementations of `Serialize` and `Des
 
 Another possible use of a `JavaScriptPrimitiveConverter` might be to support `XmlElement` fields embedded in model types. By default, `XmlElement` instances won't produce any output with the JSON serializer, because the data type does not have any data members that can be both read and written to. However, a `JavaScriptPrimitiveConverter` could take over handling of `XmlElement` values and convert the subtrees they represent into the corresponding XML text, to be output as a JSON string for transport.
 
-[[View Complete Sample Class|Sample JavaScriptPrimitiveConverter]]
+[View Complete Sample Class](/docs/using-models/sample-javascript-primitive-converter)
 
-## How do I actually use them?
+# How do I actually use them?
 
 `JavaScriptConverter`s and `JavaScriptPrimitiveConverter`s must be enabled in each `JavaScriptSerializer` object in order to be active. There are two ways to accomplish this:
 
@@ -139,7 +141,7 @@ Another possible use of a `JavaScriptPrimitiveConverter` might be to support `Xm
 
 2. If you need to use the converters in a situation where the actual `JavaScriptSerializer` object is being implicitly created, or if you need the effects of a converter to be available globally, you can add converters to the static collections `JsonSettings.Converters` and `JsonSettings.PrimitiveConverters`. The `JavaScriptSerializer` objects used within model binding and default model serialization by Nancy automatically register any converters found in these collections at the time they are constructed.
 
-## What about XML?
+# What about XML?
 
 Nancy uses the .NET Framework's own built-in `XmlSerializer` infrastructure to handle clients sending and receiving data using XML as the transport format. The design of `XmlSerializer` is quite extensible, and the way in which it is extensible is different from the `JavaScriptConverter` and `JavaScriptPrimitiveConverter` types that JSON serialization employs. `XmlSerializer` is unaware of JSON converters, and `JavaScriptSerializer` ignores XML-specific attributes. Thus, extensions to XML serialization and to JSON serialization can coexist in the same project without interfering with one another.
 
@@ -150,7 +152,3 @@ It is beyond the scope of this documentation to fully explain how to take contro
 2. For more complicated scenarios, there is an interface that `XmlSerializer` checks for. Data types that implement `IXmlSerializable` can take complete charge over the translation of XML data to/from C# objects.
 
 More information can be found at MSDN ([here](http://msdn.microsoft.com/en-us/library/2baksw0z(v=vs.110).aspx) and [here](http://msdn.microsoft.com/en-us/library/system.xml.serialization.ixmlserializable(v=vs.110).aspx)), as well as in many tutorials available on the web ([here's one](http://www.codeproject.com/Articles/43237/How-to-Implement-IXmlSerializable-Correctly)).
-
-***
-
-<p align="center">[[« Part 20. Content negotiation|Content negotiation]]&nbsp;&nbsp;—&nbsp;&nbsp;[[Documentation overview|Documentation]]&nbsp;&nbsp;—&nbsp;&nbsp;[[Part 22. Authentication »|Authentication overview]]</p>

@@ -1,3 +1,5 @@
+Order: 1
+---
 Explaining the authentication support in Nancy is pretty easy - there really is not any. That is not to say that you cannot do authentication with Nancy, or that it is not on the “super duper happy path”, but at the core Nancy contains only some very basic constructs around authentication, which other packages (or your own) can take advantage of to provide many types of authentication.
 
 Instead of shipping inflexible, hard coded, “built in” authentication providers, the shipped authentication facilities takes advantage of extension points in Nancy, such as Application pipelines, Module pipelines, `NancyContext` and normal extension methods to provide the desired functionality.
@@ -10,7 +12,7 @@ Out-of-the-box we ship the following authentication mechanisms, each of which is
  - Basic (`Nancy.Authentication.Basic`)
  - Stateless (`Nancy.Authentication.Stateless`)
 
-## What did you say your name was again?
+# What did you say your name was again?
 
 Even though Nancy does not know anything about authenticating a user, it still understands the concept of a user. In Nancy a user is defined by the `IUserIdentity` interface, which provides the basic information about a user's identity
 
@@ -35,7 +37,7 @@ To gain access to the current authenticated user, you simply access the `Current
 
 The context should be available in most places of Nancy so it should never be an issue to get the identity of the user that is invoking the current request.
 
-## Securing your resources
+# Securing your resources
 
 Establishing the identity of the current user is only half of the equation. You also need to have a way to secure resources in your application, so that they are only permitted to be accessed by authenticated users and perhaps even users that meet certain claims.
 
@@ -121,7 +123,7 @@ public class SecureModule : NancyModule
 
 To be granted permission to the routes in the `SecureModule` above, the user has to be accessing it using https, be authenticated, and have the Admin claim. If either of these are untrue then permissions will be denied.
 
-## Creating your own security extensions
+# Creating your own security extensions
 
 To create your own security extensions you simply add extension methods to the `NancyModule` that attaches to the `Before` pipeline and inspects the credentials. 
 
@@ -151,7 +153,7 @@ public static class ModuleSecurity
 ```
 This makes sure that the `CurrentUser` has been set and that it has a valid `UserName` in which case it will return `null`, meaning that the execution should continue as normal. Invalid credentials will result in a response, with the `HttpStatusCode.Unauthorized` status code, to be returned which will terminate the current request prematurely, thus it will never reach a route.
 
-## Implementing your own authentication provider
+# Implementing your own authentication provider
 
 The actual implementation of an authentication provider is going to vary depending on your requirements but the basic pattern goes as follows
 
@@ -160,8 +162,3 @@ The actual implementation of an authentication provider is going to vary dependi
 3. An `After` hook on the [application pipeline](The Application Before, After and OnError pipelines) will check for a request that was aborted due to failed authentication, such as keeping an eye out for a response with the `HttpStatusCode.Unauthorized` (401) status code. If detected it will take steps to help the user get authenticated, such as redirecting to a login form or perhaps signal to the client with help of headers
 
 Your mileage may vary but that is the basic flow of an authentication provider.
-
-
-***
-
-<p align="center">[[« Part 21. Extending Serialization with Converters|Extending Serialization with Converters]]&nbsp;&nbsp;—&nbsp;&nbsp;[[Documentation overview|Documentation]]&nbsp;&nbsp;—&nbsp;&nbsp;[[Part 22. Stateless »|Stateless authentication]]</p>

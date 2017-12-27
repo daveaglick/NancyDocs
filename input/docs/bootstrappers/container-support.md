@@ -1,4 +1,4 @@
-## Ninject
+# Ninject
 
 First, install the [Nancy.Bootstrappers.Ninject](http://nuget.org/packages/Nancy.Bootstrappers.Ninject) package. Then, make your custom bootstrapper inherit from `NinjectNancyBootstrapper` instead of `DefaultNancyBootstrapper`. Finally, override the `ConfigureApplicationContainer` and the `ConfigureRequestContainer` methods, and bind your dependencies. The `container` parameter in `ConfigureRequestContainer` is a child container which is disposed at the end of the request.
 
@@ -21,7 +21,7 @@ First, install the [Nancy.Bootstrappers.Ninject](http://nuget.org/packages/Nancy
         }
     }
 
-## Autofac
+# Autofac
 From [stackoverflow](https://stackoverflow.com/questions/17325840/registering-startup-class-in-nancy-using-autofac-bootstrapper/18997394#18997394)    
 
     public class Bootstrapper : AutofacNancyBootstrapper
@@ -36,6 +36,6 @@ From [stackoverflow](https://stackoverflow.com/questions/17325840/registering-st
             builder.Update(existingContainer.ComponentRegistry);          
         }
     }
-## More to come
+# More to come
 
 ...

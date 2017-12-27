@@ -1,6 +1,9 @@
+Title: Accessing The Client Certificate When Using SSL
+Order: 11
+---
 To authenticate the client the client can send a certificate. To do this in Nancy you need one of three hosting solutions: `Aspnet`, `WCF`, `OWIN` or `Hosting.Self`. Here is shown howto configure all three to work with SSL and client certificates.
 
-## Configuration of `Aspnet`.
+# Configuration of `Aspnet`.
 
 If the `web.config` file within the `system.webServer` tag we need to specify we want to be able to receive a ClientCertificate. Like this:
 
@@ -28,7 +31,7 @@ See [here](http://www.microsoft.com/web/post/securing-web-communications-certifi
 
 See [here](http://www.iis.net/learn/manage/configuring-security/how-to-set-up-ssl-on-iis) how to do it on IIS.
 
-## Configuration of `WCF`
+# Configuration of `WCF`
 
 Nothing is ever easy with `WCF` configuration, this is no exception. 
 
@@ -44,7 +47,7 @@ var host = new WebServiceHost(
 
 We need to tell the binding we want to use `Transport Security` and we need to tell it to expect a certificate from the client. We also need to tell `WCF` not to worry about whether the certificate is valid. Or at least determine ourselves what valid is.
 
-### Binding
+## Binding
 
 ```csharp
 var binding = new WebHttpBinding();
@@ -52,7 +55,7 @@ binding.Security.Mode = WebHttpSecurityMode.Transport;
 binding.Security.Transport.ClientCredentialType = HttpClientCredentialType.Certificate;
 ```
 
-### Custom validation of the certificate.
+## Custom validation of the certificate.
 
 ```csharp
 public class Auth : X509CertificateValidator
@@ -71,7 +74,7 @@ host.Credentials.ClientCertificate.Authentication.CertificateValidationMode = Sy
 host.Credentials.ClientCertificate.Authentication.CustomCertificateValidator = new Auth();
 ```
 
-### Endpoint
+## Endpoint
 Add the endpoint:
 ```csharp
 host.AddServiceEndpoint(typeof(NancyWcfGenericService),binding,"");
@@ -87,20 +90,20 @@ Open it:
 host.Open();
 ```
 
-### Command line configuration
+## Command line configuration
 But this wont work you need to run a `netsh` command like this:
 where certhash is the thumbprint of the server certificate without spaces.
 ```sh
 netsh http add sslcert ipport=0.0.0.0:1234 certhash=303b4adb5aeb17eeac00d8576693a908c01e0b71 appid={00112233-4455-6677-8899-AABBCCDDEEFF} clientcertnegotiation=enable
 ```
 
-## Configuration of `OWIN`
+# Configuration of `OWIN`
 It'll just be there if the host sends it on.
 
 If you use IIS as a host. You'll need to do the same config as with Aspnet. And you'll need an OWIN Aspnet host that supports the ClientCertificate. The [one](https://github.com/NancyFx/Nancy/blob/master/src/Nancy.Demo.Hosting.Owin/SimpleOwinAspNetHost.cs) in the OWIN demo in Nancy does. The [one](https://github.com/prabirshrestha/simple-owin) by @prabirshrestha also does.
 
 
-## Configuration of `Hosting.Self`
+# Configuration of `Hosting.Self`
 
 It starts with a commandline command like the one in wcf: (remember the certhash is the thumbprint without spaces)
 ```sh

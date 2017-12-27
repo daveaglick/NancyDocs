@@ -12,7 +12,3 @@ It will also use resx files eg. `Text.resx`, `Text.de-DE.resx` (but can be [over
 [2]: https://github.com/NancyFx/Nancy/blob/master/src/Nancy/Conventions/DefaultViewLocationConventions.cs
 [3]: https://github.com/NancyFx/Nancy/blob/master/src/Nancy/Localization/ResourceBasedTextResource.cs
 [4]: https://github.com/NancyFx/Nancy/tree/master/samples/Nancy.Demo.Razor.Localization
-
-***
-
-<p align="center">[[« Part 11. View location conventions|View location conventions]]&nbsp;&nbsp;—&nbsp;&nbsp;[[Documentation overview|Documentation]]&nbsp;&nbsp;—&nbsp;&nbsp;[[Part 13. Testing your application »|Testing your application]]</p>

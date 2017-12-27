@@ -1,3 +1,5 @@
+Order: 1
+---
 **TL;DR: stick stuff in `/Content` ... done.** 
 
 In Nancy parlance "Static Content" is things like javascript files, css, images etc, but can actually be anything, and Nancy uses a convention based approach for figuring out what static content it is able to serve at runtime. Nancy supports the notion of having multiple conventions for static content and each convention is represented by a delegate with the signature `Func<NancyContext, string, Response>`.
@@ -8,7 +10,7 @@ Nancy supports multiple static content conventions at once and is shipped with a
 
 For example, if you put a file called `app.js` in the `Content` folder of your application, it will be accessible at `/Content/app.js`.
 
-## Defining your own conventions using the bootstrapper
+# Defining your own conventions using the bootstrapper
 
 To define your own static content conventions, using the bootstrapper, you simply inherit a new bootstrapper and override the `ConfigureConventions` method.
 
@@ -29,14 +31,14 @@ public class CustomBootstrapper : DefaultNancyBootstrapper
 ```
 If that looks a little icky, don't worry, Nancy has a helper that will take care of (hopefully!) the vast majority of any static content convention tweaks.. the StaticContentConventionBuilder:
 
-## Using the StaticContentConventionBuilder
+# Using the StaticContentConventionBuilder
 The `StaticContentConventionBuilder` is a helper class that is shipped with Nancy. It produces static content conventions for file system based files (e.g. files on the file system, if you want to embed files in an assembly then see the previous section). It encapsulates a lot of the leg work that you would have to write yourself if you wanted to provide an efficient and secure way of letting clients request files of the file system.
 
 There are two methods that produce static content conventions
 * `AddDirectory` - For mapping directories
 * `AddFile` - For mapping individual files
 
-### Mapping a directory using AddDirectory
+## Mapping a directory using AddDirectory
 
 When using `AddDirectory` you are creating a mapping between a virtual and a physical folder on the filesystem. For instance you may store your static content in _ /assets_ on the file system, but wish for all requests, for that content, to be sent to _/public_
 
@@ -67,7 +69,7 @@ The resulting convention provides the following features:
 * Protects against “leaving” the content folder and requesting files that are stored outside the folder and the application itself. Only files in the content folder, or a sub-folder, will be considered valid to return
 * Uses the `MimeTypes` list to automatically detect and set the correct content-type of the file response
 
-### Mapping individual files with AddFile
+## Mapping individual files with AddFile
 
 The `AddFile` method enables you to map individual file names and locations. For example if you do not wish to store your _robots.txt_ file in the root of your application, but instead store it in your _/assets_ folder, you could map the location of the file and Nancy would forward incoming requests, for that file, to the right location.
 
@@ -88,7 +90,7 @@ The resulting convention provides the following features:
 * Protects against “leaving” the content folder and requesting files that are stored outside the folder and the application itself
 * Uses the `MimeTypes` list to automatically detect and set the correct content-type of the file response
 
-### Defining the new conventions for your application
+## Defining the new conventions for your application
 
 Using the `StaticContentConventionBuilder`, to create new conventions is really easy
 
@@ -107,17 +109,17 @@ public class CustomBoostrapper : DefaultNancyBootstrapper
     }
 }
 ```
-## Alternative approaches..
+# Alternative approaches..
 
 If, for some reason, you don't want to use the methods above, you can also create conventions using the IConventions interface, or bypass the static content conventions completely and just serve your content from a module.
 
-## Defining your own conventions using IConvention
+# Defining your own conventions using IConvention
 
 You can also create a class that implements the `IConvention` interface and in the `Initialise` method you add your conventions to the `StaticContentsConventions` property of the conventions that are passed in.
 
 Nancy will locate all implementations of the interface and wire up the conventions, before they are passed onto the `ConfigureConventions` method of the bootstrapper.
 
-## Serving content from a module
+# Serving content from a module
 
 You can also use an ordinary `NancyModule` to return static content, by returning responses with the correct body and content-type. Nancy even provides a few _response formatters_, to help you out, called `AsFile`, `AsImage`, `AsJson`, `AsText`, `AsXml` and `AsRedirect`.
 
@@ -127,7 +129,7 @@ However, there are disadvantages to using modules for static content management.
 
 This means that the request needs to go through things such as route resolving which can have a performance impact on your application.
 
-## Letting IIS handle static content
+# Letting IIS handle static content
 
 Sometimes you may want to allow IIS to handle static content for you rather than letting Nancy do it, maybe for performance reasons or possibly something gets misconfigured and it's not working. You can tell IIS to not use Nancy for static content by removing the handler for a specific path:
 
@@ -143,7 +145,7 @@ Sometimes you may want to allow IIS to handle static content for you rather than
 
 You can change the path to be 'images', 'scripts', 'content, or what ever you need, just be sure you don't have any routes defined which need to use this path, they will no longer work since you're basically telling IIS to not pass any of those requests to the Nancy Handler.
 
-## Extra steps required when using Microsoft.Owin.Host.SystemWeb
+# Extra steps required when using Microsoft.Owin.Host.SystemWeb
 
 When you are hosting Nancy using `Microsoft.Owin.Host.SystemWeb` you need some additional configuration to get it working in IIS.
 
@@ -172,7 +174,3 @@ You will also have to add the following to your `Web.config`:
 ```
 
 Without this additional configuration, the `StaticFileModule` from OWIN would intercept the request and return a 404.
-
-***
-
-<p align="center">[[« Part 14. The root path|The root path]]&nbsp;&nbsp;—&nbsp;&nbsp;[[Documentation overview|Documentation]]&nbsp;&nbsp;—&nbsp;&nbsp;[[Part 16. Diagnostics »|Diagnostics]]</p>

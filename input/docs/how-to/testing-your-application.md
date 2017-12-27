@@ -1,10 +1,10 @@
-The super-duper-happy-path (see [[Introduction]]) is not just something that we want to be the ethos for writing Nancy applications, but also for testing them. For that reason we provide a special assembly called `Nancy.Testing`, available via [Nuget](http://nuget.org), [our TeamCity server](http://nancy-ci.cloudapp.net/overview.html) (for latest builds) or from the [GitHub repository](https://github.com/NancyFx/Nancy/tree/master/src/Nancy.Testing), and it contains some nice helpers.
+The super-duper-happy-path (see [Introduction](/docs)) is not just something that we want to be the ethos for writing Nancy applications, but also for testing them. For that reason we provide a special assembly called `Nancy.Testing`, available via [Nuget](http://nuget.org), [our TeamCity server](http://nancy-ci.cloudapp.net/overview.html) (for latest builds) or from the [GitHub repository](https://github.com/NancyFx/Nancy/tree/master/src/Nancy.Testing), and it contains some nice helpers.
 
-_Note!_ You should always keep your tests in a separate assembly than that of your application. The reason for this is the auto-discoverability that is used by Nancy to find and wire up a lot of things, including the [[Bootstrapper]]. If you keep your tests in the same assembly then isolation is going to be a lot more difficult.
+_Note!_ You should always keep your tests in a separate assembly than that of your application. The reason for this is the auto-discoverability that is used by Nancy to find and wire up a lot of things, including the [Bootstrapper](/docs/bootstrapper). If you keep your tests in the same assembly then isolation is going to be a lot more difficult.
 
 _Note!_ Under certain circumstances, the .Net compiler will try to be smart and not include assemblies with unused types in the assembly manifest. This can prevent Nancy from auto-discovering modules that are necessary to test your application. To ensure sure that the assembly containing the routes you are testing is loaded, instantiate one of that assembly's types anywhere in your testing project.
 
-Because Nancy is a self-composing framework (see [[Bootstrapper]]), the runtime composition of the framework can have impact on the results of your routes. To help you test your routes in the right runtime context, we provide a helper class called `Browser`.
+Because Nancy is a self-composing framework (see [Bootstrapper](/docs/bootstrapper)), the runtime composition of the framework can have impact on the results of your routes. To help you test your routes in the right runtime context, we provide a helper class called `Browser`.
 
 You instantiate the Browser with the bootstrapper you want to use when the request is processed, and then fire off requests and inspect the results.
 ```c#
@@ -51,7 +51,7 @@ public void Should_return_status_ok_when_route_exists()
 
 The `BrowserResult` type will give you full access to the `NancyContext`, that was used during the processing of the request and also give you access to the actual request and response objects as well.
 
-## Controlling the execution environment
+# Controlling the execution environment
 
 Sometimes you are going to want more fine grained control over the composition of Nancy that is being used to execute the test. In these situations, using the `DefaultNancyBootstrapper`, or sub class of it, won’t give you the control you are going to need.
 
@@ -59,7 +59,7 @@ For this reason, the Nancy.Testing assembly contains a bootstrapper called `Conf
 
 Being able to tell the bootstrapper to use a specific instance is very powerful, it would, for example, enable you to use mocks in the composition of the framework and do assertions on those in your tests.
 
-## Being assertive
+# Being assertive
 
 Once you’ve executed your request and retrieved your response you’re going to want to run some assertions to make sure everything is a-ok. The Nancy testing library provides a number of helpers to make asserting common things easy and, more importantly, to keep the intent of your tests clear and concise.
 
@@ -115,7 +115,7 @@ In this test we use the browser object to create a request that’s equal to the
 
 This particular sample shows a very simple selector, but you can use the full power of CSS3 selectors ([http://www.w3.org/TR/css3-selectors/](http://www.w3.org/TR/css3-selectors/)) to grab elements from the HTML and run asserts against them.
 
-## Digging deeper with test extensions
+# Digging deeper with test extensions
 
 There's a number of extension methods that can prove very handy for the aspiring test-driven-developer. For example, the `BrowserResult` object mentioned above is awesome, because it shows everything that is rendered on the browsers. But it doesn't show what created the `BrowserResult`. Luckily the `GetModel<T>()` extension is there to help you. 
 
@@ -173,16 +173,12 @@ There are a couple of other extension methods as well, that can help you in test
 
 These methods could be helpful while testing the inner workings of your applications, which are not always visible in generated responses.
 
-##  More Info
+# More Info
 
-* [[Nancy and VB.Net: testing your modules.|http://blogs.lessthandot.com/index.php/WebDev/ServerProgramming/nancy-and-vb-net-testing]]
-* [[Intro to testing with Nancy|http://www.marcusoft.net/2013/01/NancyTesting1.html]]
-* [[The Configurable bootstrapper|http://www.marcusoft.net/2013/01/NancyTesting2.html]]
-* [[The Browser and Response objects|http://www.marcusoft.net/2013/01/NancyTesting3.html]]
-* [[Testing (razor) views|http://www.marcusoft.net/2013/02/NancyViewTesting.html]]
-* [[Hat and shoeless testing with Simple.Data|http://www.marcusoft.net/2013/02/NancyTesting4.html]]
-* [[Executable Specifications Through The Full Stack, In Memory|http://www.marcusoft.net/2013/02/NancyTesting5.html]]
-
-***
-
-<p align="center">[[« Part 12. Localization|Localization]]&nbsp;&nbsp;—&nbsp;&nbsp;[[Documentation overview|Documentation]]&nbsp;&nbsp;—&nbsp;&nbsp;[[Part 14. The root path »|The root path]]</p>
+* [Nancy and VB.Net: testing your modules.](http://blogs.lessthandot.com/index.php/WebDev/ServerProgramming/nancy-and-vb-net-testing)
+* [Intro to testing with Nancy](http://www.marcusoft.net/2013/01/NancyTesting1.html)
+* [The Configurable bootstrapper](http://www.marcusoft.net/2013/01/NancyTesting2.html)
+* [The Browser and Response objects](http://www.marcusoft.net/2013/01/NancyTesting3.html)
+* [Testing (razor) views](http://www.marcusoft.net/2013/02/NancyViewTesting.html)
+* [Hat and shoeless testing with Simple.Data](http://www.marcusoft.net/2013/02/NancyTesting4.html)
+* [Executable Specifications Through The Full Stack, In Memory](http://www.marcusoft.net/2013/02/NancyTesting5.html)

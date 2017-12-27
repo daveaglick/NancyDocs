@@ -1,3 +1,6 @@
+Order: 10
+---
+
 _This page contains implementation advice for view engines. It's work-in-progress_
 
 * The _url_ of a Nancy request should always be _url-decoded_

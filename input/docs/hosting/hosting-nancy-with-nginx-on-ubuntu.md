@@ -1,3 +1,5 @@
+Order: 7
+---
 This tutorial describes how to install and run a NancyFx behind Nginx web server powered website on [Ubuntu 14.04][ubuntu], but newer versions will probably work fine.
 
 Although you could run NancyFx just self hosted on a Linux machine, using Nginx has a lot of advantages like:

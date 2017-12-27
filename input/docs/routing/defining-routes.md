@@ -1,4 +1,7 @@
-*Note: This applies to Nancy 0.17.0 onwards, if you're still using a previous version of Nancy please refer to [[Legacy Routing]]*
+Order: 1
+---
+
+*Note: This applies to Nancy 0.17.0 onwards, if you're still using a previous version of Nancy please refer to [Legacy Routing](/docs/routing/legacy-routing)*
 
 Routes are defined in the constructor of a module. In order to define a route in Nancy, you need to specify a `Method` + `Pattern` + `Action` + (optional) `Condition`.
 
@@ -32,13 +35,13 @@ public class ProductsModule : NancyModule
 ```
 
 
-## Method
+# Method
 
 The Method is the [HTTP method](http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html) that is used to access the resource. Nancy supports the following methods `DELETE`, `GET`, `HEAD`, `OPTIONS`, `POST`, `PUT` and `PATCH`.
 
 By default, `HEAD` requests are automatically handled for all routes that are declared for `GET` requests. If you want to manually handle `HEAD` requests, you can set `StaticConfiguration.EnableHeadRouting` to `true` and define the routes in your modules. You can also check to see if `Request.Method` is `"HEAD"` (within your `GET`-routed request) if you need to handle that verb differently, but still want to take advantage of Nancy's automatic `HEAD` routes.
 
-## Pattern
+# Pattern
 
 A route also needs a Pattern which declares the application-relative URL that the route answers to. The syntax of the Pattern is customizable but the default implementation that ships with Nancy supports capturing combinations of the following:
 
@@ -55,7 +58,7 @@ A route also needs a Pattern which declares the application-relative URL that th
 
 Pattern segments can be combined, in any order, to create a complex Pattern for a route. It’s worth noting that capture segments are greedy, meaning they will match anything in the requested URL until another segment matches or until the end of the URL is reached.
 
-## Pattern Scoring
+# Pattern Scoring
 
 Sometimes you may end up with two routes which end up giving a positive match.
 
@@ -82,11 +85,11 @@ A literal has a score of `10000` while a capture has a score of `1000`, if both 
 
 If we browse to the URL `http://www.site.com/sayhello` both routes would match and the 2nd route would score `10000` and that method will execute.
 
-## Action
+# Action
 
-A route Action is the behavior which is invoked when a request is matched to a route. It is represented by a lambda expression of type `Func<dynamic, dynamic>` where the dynamic input is a `DynamicDictionary`, a special dynamic type that is defined in Nancy and is covered in [[Taking a look at the DynamicDictionary]]
+A route Action is the behavior which is invoked when a request is matched to a route. It is represented by a lambda expression of type `Func<dynamic, dynamic>` where the dynamic input is a `DynamicDictionary`, a special dynamic type that is defined in Nancy and is covered in [Taking a look at the DynamicDictionary](/docs/taking-a-look-at-the-dynamic-dictionary).
 
-The response can be any model and the final result will be determined by [[Content Negotiation]]. However, if it is of the type `Response` then content negotiation will be ignored and the response will be sent straight back to the host.
+The response can be any model and the final result will be determined by [Content Negotiation](/docs/using-models/content-negotiation). However, if it is of the type `Response` then content negotiation will be ignored and the response will be sent straight back to the host.
 
 The `Response` object declares several implicit cast operators which enables an action to also return, instead of a `Response` object, any of the following
 
@@ -95,7 +98,7 @@ The `Response` object declares several implicit cast operators which enables an 
 3. `string` which will be interpreted as the body of the response
 4. `Action<Stream>` which is a function that writes to the response stream
 
-## Condition
+# Condition
 
 The last part is an optional Condition that can be used to make sure that a route is only matched if certain conditions are met. This could e.g be a check to ensure that the route is only invoked if it was used by a mobile user-agent. A route condition is defined using a lambda expression of type `Func<NancyContext, bool>`.
 
@@ -111,7 +114,7 @@ Post["/login", (ctx) => !ctx.Request.Form.remember] = _ =>
 };
 ```
 
-## Route Segment Constraints
+# Route Segment Constraints
 *Note: Route segment constraints was introduced in version 0.21*
 
 Route segment constraints allows you apply certain constraints to your captured route segments. To apply a constraint to a segment, simply add a `:` followed by the name of the constraint to the route segment:
@@ -140,14 +143,14 @@ The following constraints are available out of the box:
  - `length(minimum, maximum)` - Allows only values with length within the specified range. (Between `minimum` and `maximum`)
  - `version` (**Added in 1.2**) - Allows only [`Version`](https://msdn.microsoft.com/en-us/library/system.version%28v=vs.110%29.aspx) values, e.g. `1.2.0`.
 
-### Custom Constraints
+## Custom Constraints
 
 You can also implement your own, custom constraints. It's as easy as implementing `IRouteSegmentConstraint` and it will automatically be picked up by Nancy, SDHP-style. You can also derive your constraint from one of these convenience classes:
 
  - `RouteSegmentConstraintBase<T>` - Base class for a named constraint.
  - `ParameterizedRouteSegmentConstraintBase<T>` - Base class for a named constraint that accepts arguments.
 
-#### Example
+### Example
 
 Here's an example implementation of an e-mail constraint (_although very simplified_):
 
@@ -181,11 +184,11 @@ Get["/profile/{value:email}"] = parameters => "Value " + parameters.value + " is
 
 This route will only get hit as long as the `value` segment contains a `@`. The value that's passed to the route is the value returned through the `matchedValue` out parameter.
 
-#### Resources
+### Resources
 
 Head over to the [Constraints Sample Project](https://github.com/NancyFx/Nancy/tree/master/samples/Nancy.Demo.ConstraintRouting) to look at some samples or take a look at the [existing constraint implementations](https://github.com/NancyFx/Nancy/tree/master/src/Nancy/Routing/Constraints).
 
-## The secret for selecting the right route to invoke
+# The secret for selecting the right route to invoke
 
 There are a couple of gotchas you should be aware of when it comes to the default behavior, in Nancy, for selecting which route to invoke for a request. It sounds easy enough, you pick the one that matches the `Method`, `Pattern` and `Condition` of the request, right? In the simplest case that is true and how it is selected, but what if things are a bit more complicated?
 
@@ -198,7 +201,7 @@ Turns out it’s not complicated after all, you just need to remember a couple o
 3. If there are several possible matches, the most specific match, i.e the route pattern that has the highest number of matching literal segments and fewest capture segments
 4. If two, or more, routes are equal matches to a request, the first one is selected and which one this is depends on the module load order and the route order inside of the modules
 
-## Going crazy with routes
+# Going crazy with routes
 
 Below are some samples of what routes in Nancy can look like. They cover some of the possible usages, but not all of them. 
 
@@ -224,7 +227,7 @@ Post["/users/{id}/add/{category}"] = parameters => {
 };
 ```
 
-## Separating interface from implementation
+# Separating interface from implementation
 
 In practice it is often good design to separate a service interface from the implementation.
 
@@ -239,7 +242,3 @@ private dynamic FavoriteNumber (dynamic parameters) {
     return "So your favorite number is " + parameters.value + "?";
 }
 ```
-
-***
-
-<p align="center">[[« Part 2. Exploring the Nancy module|Exploring the Nancy module]]&nbsp;&nbsp;—&nbsp;&nbsp;[[Documentation overview|Documentation]]&nbsp;&nbsp;—&nbsp;&nbsp;[[Part 3. Custom routing »|Custom Routing]]</p>

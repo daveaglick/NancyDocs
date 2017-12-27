@@ -1,5 +1,3 @@
-# Nancy Testing Advanced: View Location
-
 By default Nancy unit tests will struggle to find view files when you run your tests.  You can create the following file in your test project to help Nancy out.
 
 ```c#

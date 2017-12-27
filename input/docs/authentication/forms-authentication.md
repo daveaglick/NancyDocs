@@ -1,3 +1,5 @@
+Order: 3
+---
 This document provides an overview on how to enable forms authentication in your Nancy application. For a full working sample, please refer to the `Nancy.Demo.Authentication.Forms` project in the Nancy solution.
 
 To enable forms authentication in your application, you need to complete the following steps
@@ -7,7 +9,7 @@ To enable forms authentication in your application, you need to complete the fol
 1. Implement routes to handle login and logout
 1. Configure and enable Forms Authentication
 
-## The user mapper
+# The user mapper
 
 The user mapper is responsible for mapping a user from an identifier. The identifier is the token that will be put in the authentication cookie which will be used to re-establish the identity of the user that is performing the request, so that you do not need to enter your credentials for each request.
 
@@ -34,7 +36,7 @@ public interface IUserMapper
 
 A single method whose sole responsibility is to take the GUID identifier and return the corresponding user. If the identifier could not be mapped to a user then `null` should be returned. For more information about the `IUserIdentity` interface, refer to the [Authentication overview](Authentication overview).
 
-## Modifying your application to handle forms authentication
+# Modifying your application to handle forms authentication
 
 Once you have implemented an `IUserMapper`, it is time to add the resources to your application that are responsible for handling the login and logout procedures. These are implemented using normal routes, and should be placed in a module that does not require the user to be authenticated to access.
 
@@ -78,7 +80,7 @@ Note1: The `IsAjaxRequest` extension method (found in Nancy.Extensions.RequestEx
 
 Note 2: Please make sure the routes you define for displaying the login page and taking login credentials are not secured behind a RequiresAuthentication call - you may laugh, but this is quite a common mistake :-)
 
-## Enabling forms authentication
+# Enabling forms authentication
 
 The only thing left to do now is actually enable Forms Authentication.  
 Forms Authentication can be enabled for:
@@ -87,12 +89,12 @@ Forms Authentication can be enabled for:
 
 Most people usually enable it for all modules (or not at all). So why would you enable it on a _per module_ basis only? If you've got some routes that might be using [Stateless Authentication](Stateless Authentication). This means part of your website might be returning json results (so half of the site is an API) where the other half is like a normal website with views returned, etc. Having a _hybrid_ authentication site means you wouldn't want to have forms authentication applied to those API routes, and vice versa.
 
-### All modules (ie application wide)
+## All modules (ie application wide)
 ```c#
 FormsAuthentication.Enable(pipelines, formsAuthConfiguration);
 ```
 
-### Per module
+## Per module
 ```c#
 FormsAuthentication.Enable(module, formsAuthConfiguration);
 ```
@@ -125,7 +127,7 @@ The following configurations can be made
 - `DisableRedirect` - Determines whether to redirect to the login page during an unauthorized access
 - `CryptographyConfiguration` - The `CryptographyConfiguration.Default` that should be used when working with the forms authentication cookie. If this is not specified then `CryptographyConfiguration.Default` will be used as the default.
 
-## A word on cryptography
+# A word on cryptography
 
 If you do not specify a value for the `CryptographyConfiguration` property on the `FormsAuthenticationConfiguration` object, then it will default to using `CryptographyConfiguration.Default`.
 
@@ -147,12 +149,8 @@ var config =
     };
 ```
 
-##  More Info
+#  More Info
 
-[[Forms authentication with nancyfx|http://www.philliphaydon.com/2012/12/18/forms-authentication-with-nancyfx/]]
+[Forms authentication with nancyfx](http://www.philliphaydon.com/2012/12/18/forms-authentication-with-nancyfx/)
 
-[[Multiple forms authentication sections|http://www.philliphaydon.com/2012/12/20/configuring-multiple-forms-authentication-sections-with-nancyfx/]]
-
-***
-
-<p align="center">[[« Part 22. Stateless Authentication|Stateless Authentication]]&nbsp;&nbsp;—&nbsp;&nbsp;[[Documentation overview|Documentation]]&nbsp;&nbsp;—&nbsp;&nbsp;[[Part 22. Basic Authentication »|Basic Authentication]]</p>
+[Multiple forms authentication sections](http://www.philliphaydon.com/2012/12/20/configuring-multiple-forms-authentication-sections-with-nancyfx/)

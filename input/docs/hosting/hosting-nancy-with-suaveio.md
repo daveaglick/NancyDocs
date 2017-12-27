@@ -1,3 +1,6 @@
+Title: Hosting Nancy With Suave.IO
+Order: 4
+---
 Nancy is a great choice for applications that want to run a [lightweight HTTP server](http://suave.io) without the overhead of IIS. To do this, take the following steps.
 
 Create your **paket.references** file for a new F# Console App:
@@ -52,7 +55,7 @@ Content-Length: 35
 Hello World, from NancyFx on Suave!
 ```
 
-## C# Example
+# C# Example
 
 
 ``` csharp

@@ -1,3 +1,5 @@
+Order: 3
+---
 The Super Simple View Engine, also known as SSVE, is a regex (the implementation uses regular expressions to perform substitutions) based view engine that was designed to support simple templating scenarios, so a lot of the features you see in other engines may not be available.
 
 There is no need to install a separate Nuget to use the engine as it is embedded into the main Nancy assembly, and will automatically be wired up and ready to use in your application. The engine handles views with either `sshtml`, `html` or `htm` file extensions.
@@ -10,7 +12,7 @@ As SSVE is a regular expression based view engine there is no “code execution�
 
 Please note that all quotes should be _single-quotes_ in the expressions
 
-### Standard variable substitution
+# Standard variable substitution
 Replaces with the string representation of the parameter, or the model itself if a parameter is not specified. If the substitution can not be performed, for instance if you specify an invalid model property, it will be substituted with `[Err!]`
 
 Syntax
@@ -23,7 +25,7 @@ Example
 Hello @Model.Name, your age is @Model.User.Age
 ```
 
-### Iterators
+# Iterators
 Enables you to iterate over models that are collection. Iterators cannot be nested 
 
 Syntax
@@ -42,7 +44,7 @@ Example
 @EndEach
 ```
 
-### Conditionals
+# Conditionals
 Parameters must be a boolean (see Implicit Conditionals below). Nesting of @If and @IfNot statements is not supported.
 
 
@@ -60,7 +62,7 @@ Example
 @EndIf
 ```
 
-### Implicit Conditionals
+# Implicit Conditionals
 If the model has property that implements `ICollection` then you can use an implicit conditional. The implicit conditional syntax is the same as a normal conditional, but the `Parameters` part can have a `Has`-prefix. The conditional will be true if the collection contains items, and false if it does not or if it is null.
 
 Syntax
@@ -77,7 +79,7 @@ Example
 
 The above example will expand to "Users found!" if the model has a collection called `Users` and it contains items; if the collection is empty then the text would not be displayed.
 
-### HTML Encoding
+# HTML Encoding
 Both the `@Model` and `@Current keywords` (with or without parameters) can have an optional `!` operator, after the `@`, to HTML encode the output.
 
 Syntax
@@ -95,7 +97,7 @@ Example
 @EndEach
 ```
 
-### Partials
+# Partials
 Renders a partial view. A property of the current model can be specified to be used as the partial view's model, or it may be omitted to use the current view's model instead. The file extension of the view is optional.
 
 Syntax
@@ -111,7 +113,7 @@ Example
 // Renders the partial view using the User as the model
 @Partial['subview.sshtml', Model.User];
 ```
-### Master pages and sections
+# Master pages and sections
 You can put shared layout in a master page and declare content sections that will be populated by the views. It is possible to have nested master pages and you are not obligated to provide content for all of the content sections.
 
 The master pages will have access to the `@Model` of the view and the file extension is optional when specifying the name of the master to use in your view.
@@ -143,7 +145,7 @@ Example
 @EndSection
 ```
 
-### Anti-forgery token
+# Anti-forgery token
 Renders an anti-forgery token, on the page, in an hidden input to prevent cross-site request forgery attacks. The token will automatically be validated when a new request is posted to the server (assuming CSRF protection hasn’t been turned off).
 
 Syntax
@@ -156,7 +158,7 @@ Example
 @AntiForgeryToken
 ```
 
-### Path expansion
+# Path expansion
 
 Expands a relative paths to a fully qualified URL. 
 
@@ -172,10 +174,6 @@ Example
 
 Starting from v1.2, SSVE performs automatic path expansion in all HTML attributes (more specifically, in all `name="value"` pairs, both with single and double quotes around `value`) where attribute value starts with `~/`. For example, `<a href="@Path['~/relative/path']" ...>` can be significantly shortened to `<a href="~/relative/path" ...>`.
 
-### Extending the SSVE
+# Extending the SSVE
 
 It is possible to extend the SSVE to support additional 'matchers' to meet your needs.  [This stackoverflow post](http://stackoverflow.com/a/23614404/350933) gives an example of how to do this by describing how you could extend the SSVE to support text translation substitutions similar to the "@Text.TranslationKey" token support of the Razor View Engine.
-
-***
-
-<p align="center">[[« Part 10. View Engines|View Engines]]&nbsp;&nbsp;—&nbsp;&nbsp;[[Documentation overview|Documentation]]&nbsp;&nbsp;—&nbsp;&nbsp;[[Part 10. Razor »|Razor View Engine]]</p>

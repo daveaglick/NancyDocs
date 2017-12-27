@@ -4,11 +4,11 @@ The diagnostics dashboard is embedded in the main Nancy assembly. The back-end i
 
 You reach the dashboard by pointing your browser to `http://<address-of-your-application>/_Nancy/`. However before being able to use the dashboard, you first need to configure it.
 
-## Configuring access to the dashboard
+# Configuring access to the dashboard
 
 The dashboard is automatically available to you, in your application. However in order to gain access, you need to configure a password. Without the password you will be presented with a page telling you that the dashboard needs to be configured in order for you to use it, along with instructions on how to perform the configuration.
 
-To configure a password for your diagnostics dashboard, you need to override the `DiagnosticsConfiguration` property of your [[Bootstrapper]]. Once overridden, you should return an instance of the `DiagnosticsConfiguration` that has had a password assigned to the `Password` property.
+To configure a password for your diagnostics dashboard, you need to override the `DiagnosticsConfiguration` property of your [Bootstrapper](/docs/bootstrapper). Once overridden, you should return an instance of the `DiagnosticsConfiguration` that has had a password assigned to the `Password` property.
 ```c#
 using Nancy.Diagnostics;
 using Nancy.Configuration;
@@ -26,7 +26,7 @@ When this has been done, you will be presented with a login screen instead of a 
 
 Each access to the dashboard will extend the lifetime, of the cookie, for another 15 minutes. If the cookie expires, before you revisit the dashboard, you will be redirected back to the login form.
 
-## Removing diagnostics
+# Removing diagnostics
 
 As mentioned earlier, the diagnostics dashboard is automatically wired up for your application. However, should you wish to completely remove the dashboard you can do so by performing a call to `DiagnosticsHook.Disable()` and it will no longer be accessible.
 
@@ -41,15 +41,15 @@ public class CustomBootstrapper : DefaultNancyBootstrapper
     }
 }
 ```
-## So what kind of tools are there?
+# So what kind of tools are there?
 
 The dashboard presents you with four options when you access it; `Information`, `Interactive Diagnostics`, `Request Tracing` and `Configuration`. These are the main sections of the dashboard and your gateway to taking a peek under the hood of your application at runtime.
 
-### Information
+## Information
 
 The information page provides information about the setup of the Nancy environment, such as assembly version, which components are being used by Nancy, what view engines are available, what host is being used and so on.
 
-### Configuration
+## Configuration
 
 In Nancy the `StaticConfiguration` type can be used to control the behavior of your application, for example controlling the case-sensitivity, if caching should be used and so on.
 
@@ -59,7 +59,7 @@ It should be noted that any changes that are applied through the configuration p
 
 To configure these behaviors permanently you should still alter their value by setting them from the `ApplicationStartup` method in your bootstrapper.
 
-### Request tracing
+## Request tracing
 
 As you would expect, request tracing, provides a window for inspecting the behavior of individual requests as they are processed by Nancy.
 
@@ -89,13 +89,13 @@ public class HomeModule : NancyModule
 ```
 The `WriteLog` method takes a function that will be passed an instance of a `StringBuilder` at runtime. The reason it is taking a function is that when diagnostics is disabled, Nancy will simply not invoke the function so there will be no performance penalties for leaving the trace code in your application. 
 
-### Interactive diagnostics
+## Interactive diagnostics
 
 What if you could query your application about pretty much anything during runtime? This is exactly what the interactive diagnostics feature enables you to do. It does not provide a query language for you to write expressions in (even though it would be possible for you to add in your own application if you so wish), but it enables you to implement diagnostics tools as normal C# types and then invoke them from the dashboard.
 
 This enables you to use the full capabilities of the language, platform and Nancy (including dependency injection) to deliver pretty much any diagnostics capability you can think of. As long as your type implements the `IDiagnosticsProvider` interface, then the Nancy diagnostics will automatically discover it and expose it as an interactive diagnostics tool.
 
-#### The IDiagnosticsProvider interface
+### The IDiagnosticsProvider interface
 
 Anything that implements this type lets Nancy know that it is capable of providing interactive diagnostics tools for the dashboard. The interface itself is very basic and provides mostly metadata about the provider
 
@@ -126,7 +126,7 @@ public interface IDiagnosticsProvider
 ```
 The most important member, of the `IDiagnosticsProvider` interface, is the `DiagnosticObject` property. The object returned by this property is the one that will be wired up on the dashboard. 
 
-#### So what does the diagnostics object look like?
+### So what does the diagnostics object look like?
 
 There is nothing special about a diagnostics object. It does not have to be the same type as the one that implements the `IDiagnosticsProvider` interface, nor does it have to implement any other interfaces. The thing to understand is that any public method on the object are going to be exposed on the interactive diagnostics dashboard.
 
@@ -136,7 +136,7 @@ When you want to invoke one of these methods, from the diagnostics dashboard, Na
 
 The output of the method will then be rendered using the [JSON Report Format](http://docs.servicestack.net/html5reportformat) script, created by [ServiceStack](http://servicestack.net).
 
-#### Providing a description of your method
+### Providing a description of your method
 
 It is possible to provide a description for a diagnostics method that will be included in the form that is used to invoke the method. 
 
@@ -148,7 +148,7 @@ When you find yourself in these situations you can use the property approach. Na
 
 If your method has been decorated with the `DescriptionAttribute` and you also have a description property declared, then the property will take precedence over the attribute.
 
-#### Customizing the output with templates
+### Customizing the output with templates
 
 As previously mentioned, the output of your diagnostics method will be rendered using the [JSON Report Format](http://docs.servicestack.net/html5reportformat) and will use the formatting templates that it declares. However, Nancy provides you with the option to use custom output templates.
 
@@ -156,7 +156,7 @@ An output template is a `Mustache` template and you can specify a unique templat
 
 For templates, the attribute that is used is the `Nancy.Diagnostics.TemplateAttribute` and the naming convention for the property is name of the property with a `Template` suffix.
 
-#### Creating a simple diagnostics provider
+### Creating a simple diagnostics provider
 
 Let's create a simple diagnostics provider with a method that will greet someone by their name. Not really a real scenario but it is a basic enough sample to show the anatomy of a diagnostics provider without getting distorted by the implementation.
 
@@ -192,7 +192,3 @@ The provider exposes a single method, the `Greet`method. The method takes a sing
 Instead of using the default output format, the method also provides a custom `Mustache` template that will be used to format the output.
 
 A proper diagnostics provider would probably take a couple of constructor dependencies in order to be able to access the various pieces of the application.
-
-***
-
-<p align="center">[[« Part 15. Managing static content|Managing static content]]&nbsp;&nbsp;—&nbsp;&nbsp;[[Documentation overview|Documentation]]&nbsp;&nbsp;—&nbsp;&nbsp;[[Part 17. Adding a custom favicon »|Adding a custom favicon]]</p>

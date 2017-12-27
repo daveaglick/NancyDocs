@@ -1,10 +1,10 @@
-# Overview
-
-## Routing 
+Title: Nancy V2 Upgrade Notes
+---
+# Routing 
 
 Routing syntax has changed to `Get("/", args => "Hello World");`, these can be made `async` by adding the `async/await` keywords. For more info see the PR where it all changed https://github.com/NancyFx/Nancy/pull/2441
 
-## StaticConfiguration migrated to configuration API
+# StaticConfiguration migrated to configuration API
 
 Most of the members in `StaticConfiguration` have been moved out and migrated over to the new [Configuration API](Configuration-API-(Draft)).
 
@@ -16,7 +16,7 @@ The following settings have been migrated
 - Tracing
 - Routing
 
-## Context.CurrentUser ClaimsPrincipal Mapping to Domain Object
+# Context.CurrentUser ClaimsPrincipal Mapping to Domain Object
 
 In the Nancy 1.x versions, `Context.CurrentUser` was an `IUserIdentity`, you could add properties to your implementation and then access these properties that were not on the interface by casting. E.g. `var customerId = ((MyUser) Context.CurrentUser).CustomerId;`
 
@@ -61,7 +61,7 @@ public class HomeModule : NancyModule
 }
 ```
 
-## Bootstrapper DiagnosticsConfiguration
+# Bootstrapper DiagnosticsConfiguration
 
 In Nancy v2.x there is a whole new configuration API. This is now handled in the bootstrapper by overriding the `Configure` method.  For diagnostics, you can use it like this:
 
@@ -72,7 +72,7 @@ public override void Configure(Nancy.Configuration.INancyEnvironment environment
 }
 ```
 
-## Bootstrapper InternalConfiguration
+# Bootstrapper InternalConfiguration
 
 This has a different signature but now takes in an `ITypeCatalog` argument. If you are using the `WithOverrides` API this should still work, you just need to change the method signature:
 
@@ -88,17 +88,17 @@ protected override Func<ITypeCatalog, NancyInternalConfiguration> InternalConfig
 }
 ```
 
-## Nancy.Serializers.Json.ServiceStack Renamed
+# Nancy.Serializers.Json.ServiceStack Renamed
 
 This namespace has been renamed to `Nancy.Serialization.ServiceStack`.
 
-## DefaultResponseFormatter constructor change
+# DefaultResponseFormatter constructor change
 
 One of the arguments was previously an array of `ISerializer`, this is now an `ISerializerFactory`.
 
-## Known Issues
+# Known Issues
 
-### Nancy.ViewEngines.Razor dependencies
+## Nancy.ViewEngines.Razor dependencies
 
 As of 2.x, the `Nancy.ViewEngines.Razor` engine uses Roslyn internally to compile views. Unfortunately the Nuget for `Nancy.ViewEngines.Razor` (2.0-alpha) is missing a couple of dependencies which are needed to compile and render views. For the time being you will need to explicitly install these packages yourself (in the presented order):
 

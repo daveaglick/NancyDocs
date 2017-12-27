@@ -73,8 +73,8 @@ You can also follow the discussion on Twitter using the [#NancyFx](http://twitte
 ## Front-end performance 
 - [Nancy.AspNetSprites.Razor](https://github.com/JefClaes/Nancy.AspNetSprites.Razor) 
 - [Cassette.Nancy](https://github.com/ChrisMH/Cassette.Nancy)
-- [Squishit with Nancy](https://github.com/NancyFx/Nancy/wiki/SquishIt-with-Nancy)
-- [System.Web.Optimization with Nancy](https://github.com/NancyFx/Nancy/wiki/How-to-use-System.Web.Optimization-Bundling-with-Nancy)
+- [Squishit with Nancy](/docs/static-content/squishit-with-nancy)
+- [System.Web.Optimization with Nancy](/docs/how-to/how-to-use-system-web-optimization-bundling-with-nancy)
 
 ## Authentication
 - [SimpleAuthentication (Manual Setup)](https://github.com/SimpleAuthentication/SimpleAuthentication/wiki/NancyFX-Manual-Setup)

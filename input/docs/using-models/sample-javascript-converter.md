@@ -1,3 +1,5 @@
+ShowInSidebar: false
+---
 ```c#
 using Nancy.Json;
 

@@ -1,15 +1,13 @@
-# Bootstrapping Nancy #
-
-## These Boots Are Made For Walkin'.. ##
+# These Boots Are Made For Walkin'..
 
 Although you can happily construct NancyEngine yourself, and inject dependencies however you see fit, in normal use you will be taking advantage of a Bootstrapper that will:
 
 * Wireup Nancy's internal dependencies for you.
 * Allow you to customise just about everything - how much control you want is entirely up to you.
 
-## The Super-Duper-Happy-Path ##
+# The Super-Duper-Happy-Path
 
-Although the exact instructions may vary slightly depending on your choice of [[Hosting]], all you generally have to do is add a NancyModule to your project. That's it. No configuration, no registering dependencies, just 100% pure Nancy goodness - if your module has dependencies Nancy will even wire those up too!
+Although the exact instructions may vary slightly depending on your choice of [Hosting](/docs/hosting), all you generally have to do is add a NancyModule to your project. That's it. No configuration, no registering dependencies, just 100% pure Nancy goodness - if your module has dependencies Nancy will even wire those up too!
 
 For example, if you add this module to your project:
 ```c#
@@ -33,9 +31,9 @@ Nancy will automatically discover your module and, assuming you have something t
 
 We did say it was a Super-Duper-Happy-Path!
 
-## Taking Control ##
+# Taking Control
 
-### Part 1 - Customisation Options ###
+## Part 1 - Customisation Options
 
 Nancy ships with a "default bootstrapper" that takes care of all the magic in the above example. If you add your own Bootstrapper to your project, derived from DefaultNancyBootstrapper, Nancy will automatically detect it and use it in place of the default one. 
 
@@ -47,7 +45,7 @@ Once you have your own Bootstrapper class you can replace some or all of the def
 * Modules - The default implementation of this scans the application domain for NancyModules for registration into the container. Each module that is discovered is given a unique "key" so they can be retrieved individually from the container when satisfying a request.
 * ConfigureApplicationContainer / ConfigureRequestContainer - manually register dependencies - see Part 2 below for more details. 
 
-### Part 2 - Manually Registering Dependencies ###
+## Part 2 - Manually Registering Dependencies
 
 By default Nancy uses an embedded Inversion of Control container called "TinyIoC" ([see its repository](https://github.com/grumpydev/TinyIoC) for more information). The built in Bootstrapper uses TinyIoC to scan types on application startup and registers them into the container to automatically resolve dependencies.
 
@@ -73,13 +71,13 @@ Very useful post from @grumpydev at [stackoverflow](http://stackoverflow.com/a/9
 * Don't call ConfigureRequestContainer from your ConfigureApplicationContainer.
 * If you don't care about everything being application scoped (so singletons get the same instance for each request) then you don't need to override ConfigureApplicationContainer nor ConfigureRequestContainer, you can just rely on autoregister.
 
-### Part 3 - Alternative Containers ###
+## Part 3 - Alternative Containers
 
 Although they don't form part of the "core" Nancy project, Nancy's Bootstrapper architecture is designed to be easily adapted to other IoC containers. To use an alternative BootStrapper simply derive from the replacement Bootstrapper, rather than the default Nancy one, and Nancy will take care of the rest.
 
 For a list of alternative container implementations please see [Alternative Containers].
 
-### Part 4 - Barebones ###
+## Part 4 - Barebones
 
 Although Nancy provides the Bootstrapper base classes to provide a simple, customisable and consistent interface the only requirement for a BootStrapper is that it implements INancyBootstrapper:
 

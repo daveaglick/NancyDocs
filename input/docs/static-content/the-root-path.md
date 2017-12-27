@@ -1,10 +1,12 @@
+Order: 2
+---
 All paths that are used in Nancy are relative to something that is known as the _root path_. This is the path that tells Nancy where its resources are stored on the file system. The root path is provided to Nancy through the `IRootPathProvider` interface, which defines a single method, `GetRootPath`.
 
 The various hosting options are all shipped with their own implementation of this interface, because the process of figuring out where the application is located on the file system varies from host to host.
 
 Nancy will automatically use the first implementation, of the `IRootPathProvider`, that it comes across so if you provide multiple implementations the end result will be non-deterministic. Care should be taken to ensure that only one implementation exists in the application domain of the running Nancy application.
 
-## Changing the root path
+# Changing the root path
 
 Providing a custom root path is a two part process. First you need to create your own implementation of the `IRootPathProvider` interface.
 
@@ -35,7 +37,7 @@ public class CustomBootstrapper : DefaultNancyBootstrapper
 ```
 When your application runs, the bootstrapper will register this implementation in the current container and will be used when dependencies on the `IRootPathProvider` are resolved.
 
-##Uploading Files
+# Uploading Files
 
 To upload a file in Nancy you need to take the content stream of the uploaded file, create a file on disk and write that stream to disk.
 
@@ -62,7 +64,3 @@ However, you may be wondering what is `pathProvider`. This variable is passed in
     public HomeModule(IRootPathProvider pathProvider)
 
 **NOTE :** For Mono users less than version 4, there is a `StaticConfiguration. AllowFileStreamUploadAsync` property that should be set to false if you are uploading files over 80mb
-
-***
-
-<p align="center">[[« Part 13. Testing your application|Testing your application]]&nbsp;&nbsp;—&nbsp;&nbsp;[[Documentation overview|Documentation]]&nbsp;&nbsp;—&nbsp;&nbsp;[[Part 15. Managing static content »|Managing static content]]</p>

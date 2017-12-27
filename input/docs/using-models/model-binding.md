@@ -1,3 +1,6 @@
+Order: 1
+---
+
 Data can be sent to your Nancy application in many ways, for instance as part of the query string, as captured parameters on a route or as the body of a request. Manually working with the data spread out over several places is perfectly fine in some scenarios, but there are times where you want to unify that into something richer - a `model` - which is where Nancy’s “model binding” capabilities come into play.
 
 Nancy, with a single line of code, can collect information from all of the above sources, including richer request bodies such as `JSON` and `XML`, and convert them into an instance of a type of your model.
@@ -17,7 +20,7 @@ var foo = this.BindTo(instance);
 ```
 All three have the exact same functionality, they just provide different ways of doing the same thing. The first two Bind() overloads will create a new instance of the `Foo` type and bind to that, while BindTo() will bind to an existing instance.
 
-## Keeping unwanted information out by blacklisting it
+# Keeping unwanted information out by blacklisting it
 
 Sometimes you want the model binder to ignore certain information when populating the model from all the various sources (to prevent ‘over posting’ attacks for example). To accommodate this, the model binder can be called with an optional list of blacklisted properties and fields on the model:
 
@@ -36,7 +39,7 @@ The blacklist is a “params” array of strings, where the strings represents t
 
 When binding to an typed- array, list or ienumerable. The blacklist is maintained for the elements in the sequence.
 
-## Binding configuration
+# Binding configuration
 
 When using model binding, you can pass in a `BindingConfig` instance to modify the behaviour of the model binder.
 
@@ -50,7 +53,7 @@ Overwrite|Whether the binder is allowed to overwrite properties and fields that 
 
 There is a short-hand version for declaring that no overwrite should take place: `BindingConfig.NoOverwrite` will return an instance with the property or field value set to `false`.
 
-## Deserializing rich request body payloads
+# Deserializing rich request body payloads
 
 Sometimes you want to send structured data, such as `JSON` and `XML`; in the request body and bind it to your model. The model binder in Nancy supports the notion of body deserializers that provide the functionality required for this.
 
@@ -62,7 +65,7 @@ As with the other model binders, you can author your own body deserializers and 
 
 **NOTE:** If you encounter the Nancy.Json.JsonSettings.MaxJsonLength Exceeded error because your payload is too high, change that limit in your Bootstrapper in `ApplicationStartup` to be `Nancy.Json.JsonSettings.MaxJsonLength = int.MaxValue;`
 
-## Properties or Fields
+# Properties or Fields
 
 Nancy's model binding supports either fields or properties. For the purpose of model binding, these two classes have essentially identical function:
 
@@ -86,7 +89,7 @@ There are arguments for either style of class. Using properties means that if yo
 
 Unless your project has external components referencing it, it is largely unimportant which style you choose, because the syntax in most .NET languages for accessing properties and for accessing fields is identical. Thus, in most circumstances, you can change your model type to use properties or fields and recompile without any other changes required.
 
-## Model binding Checkbox
+# Model binding Checkbox
 
 For automatic model binding checkbox to boolean value, make sure to set the `value="true"` in the checkbox.
 
@@ -101,12 +104,12 @@ public class LoginModel
 }
 ```
 
-## Model binding against lists
+# Model binding against lists
 Nancy supports posting in lists of things and binding to them, on the server-side, as before with `this.Bind<T>();`.
 
 Nancy supports binding against lists of items (or arrays or anythings else that implements IEnumerable) in two different ways; as a list on the object your binding against or as a list of objects. 
 
-### Binding against arrays on a single object
+## Binding against arrays on a single object
 If you have a form like this:
 ```html
 <form action="/ArrayOnObject" method="post">
@@ -127,7 +130,7 @@ with this simple statement:
 ```c#
 var listOfPosts = this.Bind<Posts>();
 ```
-### Binding against lists of objects
+## Binding against lists of objects
 Imagine you have a system to enter who commits the most to a OSS-framework. You allow the users of the site to post a bunch of users-names and their number of commits at once. 
 
 Here's an example form with *random* dummy data:
@@ -160,13 +163,13 @@ public class User
 }
 ```
 
-### List delimiters in HTML-forms
+## List delimiters in HTML-forms
 Nancy supports two kind of list delimiters for the name of the items in the HTML-form; 
 * underscores (`Name_1`, `Name_2` etc.)
 * brackets (`Name[1]`, `Name[2]` etc.)
 
 
-### A Complete Model-binding Example
+## A Complete Model-binding Example
 Here's an end-to-end model binding example that shows the full model + view + module.
 
     /// <summary>
@@ -181,7 +184,7 @@ Here's an end-to-end model binding example that shows the full model + view + mo
         public string Password { get; set; }
     }
 
-#### View
+### View
 ```
     ViewBag.Title = "AkkaChat - Register";
 }
@@ -228,7 +231,7 @@ Here's an end-to-end model binding example that shows the full model + view + mo
 </div>
 ```
 
-#### Module
+### Module
 ```csharp
 /// <summary>
 /// Module responsible for handling authentication and account creation
@@ -308,7 +311,3 @@ public class AuthModule : NancyModule
     }
 }
 ```
-
-***
-
-<p align="center">[[« Part 7. The Application Before, After and OnError pipelines|The Application Before, After and OnError pipelines]]&nbsp;&nbsp;—&nbsp;&nbsp;[[Documentation overview|Documentation]]&nbsp;&nbsp;—&nbsp;&nbsp;[[Part 9. Bootstrapper »|Bootstrapper]]</p>

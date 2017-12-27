@@ -1,3 +1,6 @@
+Title: Hosting Nancy With WCF
+Order: 2
+---
 Nancy is a great choice for applications that want to run a lightweight HTTP server without the overhead of IIS. To do this, take the following steps: 
 
 **Make sure you have the Nancy WCF hosting libary referenced - Install the package using Nuget**

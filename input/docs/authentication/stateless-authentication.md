@@ -1,3 +1,5 @@
+Order: 2
+---
 This document provides an overview on how to enable stateless authentication in your Nancy application. Stateless authentication enables you to inspect each incoming request and, based on information about that request, decide if it should be treated as an authenticated request or not.
 
 For instance, you could inspect the request to make sure that a query string parameter was passed in (perhaps an api key), that a certain header is available, or that the request originated from a certain ip-address. A good solution for transferring stateless authentication information is using [JWT](https://jwt.io/introduction/) 
@@ -14,18 +16,18 @@ To enable stateless authentication, in your application, you need to complete th
 1. Configure and enable Stateless Authentication
 1. [Secure your modules](https://github.com/NancyFx/Nancy/wiki/Authentication-overview)
 
-## Configure and enable stateless authentication
+# Configure and enable stateless authentication
 
 Stateless Authentication can be enabled for:
 
-### All modules (ie. application wide)
+## All modules (ie. application wide)
 ```c#
 StatelessAuthentication.Enable(pipelines, statelessAuthConfiguration);
 ```
 
 This should be called from either `ApplicationStartup` or `RequestStartup` methods of your bootstrapper.
 
-### Per module
+## Per module
 ```c#
 StatelessAuthentication.Enable(this, statelessAuthConfiguration);
 ```
@@ -36,7 +38,7 @@ The `statelessAuthConfiguration` variable, that is passed into `StatelessAuthent
 
 When creating an instance of the `StatelessAuthenticationConfiguration` type, it expects a single parameter of type `Func<NancyContext, IUserIdentity>`. The function is what is used to inspect the request (or anything else in the context for that matter) and return `null` if the request should not be treated as authenticated, or the appropriate [IUserIdentity](https://github.com/NancyFx/Nancy/wiki/Authentication-overview) if it should.
 
-## Sample configuration
+# Sample configuration
 
 ```c#
 var configuration =
@@ -98,7 +100,3 @@ public class JwtToken
     public long exp;
 }
 ```
-
-***
-
-<p align="center">[[« Part 22. Authentication|Authentication overview]]&nbsp;&nbsp;—&nbsp;&nbsp;[[Documentation overview|Documentation]]&nbsp;&nbsp;—&nbsp;&nbsp;[[Part 22. Forms Authentication »|Forms Authentication]]</p>

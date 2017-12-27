@@ -1,8 +1,12 @@
+Title: Hosting Nancy With FastCgi
+Order: 8
+---
+
 In case you want to host your Nancy application while using a web server of your choice, be it IIS, Apache, Nginx, Lighttpd or any other FastCgi enabled web server, there is the option of using [Fos](http://github.com/mzabani/Fos).
 
 **Fos** is a library that allows an Owin console application to receive requests through a FastCgi socket from a web server. **Fos** is also designed to run well with Mono on all platforms.
 
-## Setting up your application with nginx on Linux
+# Setting up your application with nginx on Linux
 
 We will show you how to set up FastCgi on *nginx* and how to run your Owin application with Fos. The idea applies to any web server, so feel free to try others.
 
@@ -50,7 +54,7 @@ namespace MyApplication.Startup {
 And that is it! Don't forget to either restart *nginx* or reload the configuration file. Then just build and run your application and you're good to go!
 You can also start **Fos** with a Unix Socket, not to mention it comes with some Owin middleware to help you out with logging access times and some other stuff. Check the [official website](http://github.com/mzabani/Fos) for more.
 
-## More info
+# More info
 
 You can (and **should**, if you want to use Fos) read more about **Fos** at the [official website](http://github.com/mzabani/Fos). **Fos** is still in its infancy so you should probably not use it for production.
 Also, if anyone knows how to set up IIS with FastCgi through a TCP Socket, the author of **Fos** would very much like to know how to put that information up.

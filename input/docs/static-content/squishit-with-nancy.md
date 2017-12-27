@@ -1,4 +1,5 @@
-# Using SquishIt with Nancy
+Title: Using SquishIt with Nancy
+---
 
 SquishIt is an asset processing project that helps speed up your Nancy website by combining and minifying your CSS, JavaScript, LESS and Coffeescript files.
 
@@ -8,7 +9,7 @@ You can read an introduction to SquishIt on the authors blog, here:
 
 http://www.codethinked.com/squishit-the-friendly-aspnet-javascript-and-css-squisher
 
-### Basic Setup
+# Basic Setup
 
 To use with NancyFX you first want to install the NuGet package to your project
 
@@ -18,13 +19,13 @@ You create "bundles" of your asset files, as per the above introduction blog pos
 
 Rather than create a Global.asax file in your project you do your wiring up of bundles in the ApplicationStart of your Nancy Bootstrapper.
 
-### Advanced
+# Advanced
 
 The following sections (with the last being a full code example) cover advanced scenarios and topics of SquishIt. 
 
 The code around asset location in unit testing is specific to Nancy on .NET and Windows and will most likely not work on Mono.
 
-### Advanced - Diskless caching
+## Advanced - Diskless caching
 
 In release mode, SquishIt will write your minified files to disk. In shared hosting or in production this can cause problems or additional steps to your deployment scripts to assign folder permissions.
 
@@ -53,7 +54,7 @@ http://blogs.lessthandot.com/index.php/WebDev/UIDevelopment/AJAX/squishit-and-na
     }
 ```
 
-### Advanced - Protecting your assets
+## Advanced - Protecting your assets
 
 In certain scenarios you don't want unauthenticated users to get access to all your assets. You would construct your asset module like:
 
@@ -75,7 +76,7 @@ In certain scenarios you don't want unauthenticated users to get access to all y
     };  
 ```
 
-### Advanced - Testing with SquishIt
+## Advanced - Testing with SquishIt
 
 If you want to run tests against views with SquishIt used, you will most likely encounter:
 
@@ -102,7 +103,7 @@ You can work around this by telling SquishIt to look in your full project rather
 	bundle.Add(fullProjectPath + "/static/js/foo.js");
 ```
 
-### Advanced - Only minifying certain files
+## Advanced - Only minifying certain files
 
 If you are using something like AngularJS that relies on proper variable names for say dependancy injection, you can choose not to minify that particular file in SquishIt using:
 
@@ -110,7 +111,7 @@ If you are using something like AngularJS that relies on proper variable names f
 bundle.AddMinified("~/static/js/angular/controllers.js");
 ```
 
-### Advanced - The Full Monty
+## Advanced - The Full Monty
 
 If you want to know how I've configured my application with SquishIt, here's how.
 

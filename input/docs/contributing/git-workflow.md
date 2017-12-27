@@ -1,4 +1,4 @@
-## Overview
+# Overview
 
 The general process for working with Nancy is:
 
@@ -14,7 +14,7 @@ The general process for working with Nancy is:
 
 You should **never** work on a clone of master, and you should **never** send a pull request from master - always from a branch. The reasons for this are detailed below.
 
-## Spiking / Prototyping
+# Spiking / Prototyping
 
 It's quite normal, and encouraged, that during design/development of your feature you create several [spikes](http://www.extremeprogramming.org/rules/spike.html)/prototypes, which you share with the other developers for feedback. Due to the fact that rebasing public commits is [pure evil](http://progit.org/book/ch3-6.html), and that we require you to rebase any updates from upstream/master, it is recommended that you:
 
@@ -26,10 +26,10 @@ It's quite normal, and encouraged, that during design/development of your featur
 
 * When you're happy with the approach, create your real feature branch and start working on that. It is suggested that you effectively "throw away" your spike branch and start afresh with a test-first approach, but as long as you end up with good quality, well tested code this isn't enforced.
 
-## Basic Git workflow
+# Basic Git workflow
 For an introduction to Git, check out [GitHub Guides](https://guides.github.com/). For more information about GitHub Flow, please head over to the [Understanding the GitHub Flow](https://guides.github.com/introduction/flow/index.html) illustrated guide, both by the awesome people at GitHub.
 
-## Handling Updates from Upstream/Master
+# Handling Updates from Upstream/Master
 
 While you're working away in your branch it's quite possible that your upstream master (most likely the canonical NancyFx version) may be updated. If this happens you should:
 
@@ -43,7 +43,7 @@ This ensures that your history is "clean" i.e. you have one branch off from mast
 
 If you're working on a long running feature then you may want to do this quite often, rather than run the risk of potential merge issues further down the line.
 
-## Sending a Pull Request
+# Sending a Pull Request
 
 While working on your feature you may well create several branches, which is fine, but before you send a pull request you should ensure that you have rebased back to a single "Feature branch" - we care about your commits, and we care about your feature branch; but we don't care about how many or which branches you created while you were working on it :-)
 

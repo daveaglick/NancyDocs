@@ -1,17 +1,19 @@
+Order: 6
+---
 These are simple instructions for hosting a service within an existing [Umbraco](http://umbraco.com/) installation.
 
-## Umbraco Is Just ASP.Net...Sort of
-The key is to remember that Umbraco is just another ASP.Net application and as such the "Adding Nancy to an existing site" section in [[Hosting-nancy-with-asp.net]] will get you most of the way there.
+# Umbraco Is Just ASP.Net...Sort of
+The key is to remember that Umbraco is just another ASP.Net application and as such the "Adding Nancy to an existing site" section in [Hosting Nancy with ASP.NET](/docs/hosting/hosting-nancy-with-aspnet) will get you most of the way there.
 
 The Umbraco specific step is to edit the Web.config file to make sure Umbraco ignores requests to our service path. This is simply a matter of adding the path to the umbracoReservedPaths configuration option. For example:
 `
 <add key="umbracoReservedPaths" value="~/umbraco,~/install/,~/services" />
 `
 
-## Quick Example
+# Quick Example
 Let's assume we are implementing a set of JSON services to consume from our Umbraco pages and we want to put our set of services under `/services` so that we can make requests such as `/services/vegetables` to get a list of all available vegetables.
 
-### Our Service Implementation
+## Our Service Implementation
 Our simple service implementation might look like this:
 
 ```c#
@@ -32,7 +34,7 @@ namespace vegetablesrock.com.services
 ```
 Note that despite the fact our service is "homed" in the `/services` path we still pass this URL part into the parent constructor - our ASP.Net application (the Umbraco install base) is still rooted at "/".
 
-### Root Level Web.config
+## Root Level Web.config
 The following is a fairly detailed snapshot of the root-level Web.config file. Note that the Nancy handlers are placed immediately following the `remove` lines in the handler sections.
 
 ```xml
@@ -123,7 +125,7 @@ The following is a fairly detailed snapshot of the root-level Web.config file. N
     :
 </configuration>  
 ```
-### Service Folder Web.config
+## Service Folder Web.config
 Within the `/services` folder of our application another Web.config file exists that contains the following:
 ```xml
 <?xml version="1.0"?>

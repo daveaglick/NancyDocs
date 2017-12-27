@@ -1,3 +1,5 @@
+Order: 3
+---
 Content negotiation is a way of determining what content type to return to the client based on what the client can handle, and what the server can provide. Whenever you return something from a route, that is not a `Response` object (or anything that can be implicitly cast to a `Response` object) it will be passed through the content negotiation pipeline before being sent back in the response.
 
 ```c#
@@ -8,7 +10,7 @@ Get["/"] = parameters => {
 
 The content negotiation pipeline will inspect the incoming `Accept` headers and determine which of the requested media types is the most suitable and format the response accordingly.
 
-## The response processors
+# The response processors
 
 Processors are used to determine the most suitable content type to return to the client, and are used to actually convert the model to the corresponding type.
 
@@ -58,7 +60,7 @@ public class Bootstrapper : DefaultNancyBootstrapper
 
 It should be noted that because the response processors are registered in the bootstrapper, they can take advantage of the fact and take whatever constructor dependencies it desires. 
 
-### Match prioritization 
+## Match prioritization 
 
 When a response is about to be converted into the format of the requested media type, then Nancy will query the `CanProcess` method of all available processors and aggregate the `ProcessorMatch` return values.
 
@@ -108,15 +110,15 @@ public enum MatchResult
 
 Once it has all the `ProcessorMatch` return values it orders them, in decending order, by the `ModelResult` followed by the `RequestedContentTypeResult`. This means that the processor with the best match for both is the one that will be used to format the model. If there happens to be two or more processors with the same match then Nancy will select one of them, but which one is not guarateed.
 
-### Default response processors
+## Default response processors
 
 Nancy ships with a couple of default response processors that are automatically available to you in your applications
 
 - `JsonProcessor` - Converts the return value into json, when the requested media type is `application/json` or any json media subtype `application/foobar+json`
-- `ViewProcessor` - Renders a view, using the return value as the model, when the requested media type is `text/html`. It uses the normal [[View location conventions]], when choosing which view to render.
+- `ViewProcessor` - Renders a view, using the return value as the model, when the requested media type is `text/html`. It uses the normal [View location conventions](/docs/view-engines/view-location-conventions), when choosing which view to render.
 - `XmlProcessor` - Converts the return value into xml, when the requested media type is `application/xml` or any xml media subtype `application/foobar+xml`
 
-## Controlling the negotiation
+# Controlling the negotiation
 
 By returning a model from your route, you are giving Nancy free reign to negotiate the format of the response using all the available resources. But what if you want a bit more control, on a per-route basis, on how the negotiation process took place?
 
@@ -148,7 +150,7 @@ The `Negotiator` contains several methods that you can use to configure the retu
 - `WithAllowedMediaRange` - Specifies a media range that should be permitted to be negotiated. This defaults to “*/*”, but the wildcard is removed as soon a specific content type (or types) is given.
 - `WithStatusCode` - The status code that should be added to the response once it has been negotiated
 
-## File extension support
+# File extension support
 
 Nancy supports extension-based access to “hotwire” the negotiation process, bypassing the normal accept headers. 
 
@@ -165,7 +167,7 @@ Could be invoked by requesting `/ratpack` and an accept header of `application/j
 Internally, Nancy will detect the extension and query the available response processor’s `ExtensionMappings` property and see if any of them supports the extension. If there is a match then it will take the mapped media type and add it to the list of accept headers, but with a quality (1.1) which is higher than the other available accept headers.
 It will then strip the extension from the request and attempt to find a matching route. If it fails to find a matching route it will append the file extension again, remove the added accept header, and attempt to process it as normal.
 
-## Accept header coercion
+# Accept header coercion
 
 Unfortunately certain browsers and javascript frameworks do not send valid accept headers, which could cause content negotiation to return a non-deal content type. To work around this the negotiation pipeline has a concept of “accept header coercion” that looks at the request and tweaks the accept headers to try and smooth things out.
 
@@ -208,22 +210,18 @@ public class Bootstrapper : DefaultNancyBootstrapper
 
 You could of course inherit the bootstrapper type that you are using in your project
 
-## Defining your own conventions using IConventions
+# Defining your own conventions using IConventions
 
 You can also create a class that implements the `IConventions` interface and in the `Initialise` method you add your conventions to the `AcceptHeaderCoercionConventions` property of the conventions that are passed in.
 
 Nancy will locate all implementations of the interface and wire up the conventions, before they are passed onto the `ConfigureConventions` method of the bootstrapper.
 
-## Automatic negotiation headers
+# Automatic negotiation headers
 
 Nancy will automatically add link and vary headers to negotiated responses. The link headers link to other representations based on file extension (e.g. .json.xml etc), and the vary header is to let caches know that the contents of the response will vary depending on the accept header the client provides.
 
-## More Info
-* [[Nancy and Content Negotiation|http://www.philliphaydon.com/2012/11/08/nancy-and-content-negotiation/]]
-* [[Revisting Content Negotiation and APIs part 1|http://www.philliphaydon.com/2013/04/22/nancyfx-revisiting-content-negotiation-and-apis-part-1/]]
-* [[Revisting Content Negotiation and APIs part 2|http://www.philliphaydon.com/2013/05/09/nancyfx-revisiting-content-negotiation-and-apis-part-2/]]
-* [[Revisting Content Negotiation and APIs part 3|http://www.philliphaydon.com/2013/05/20/nancyfx-revisiting-content-negotiation-and-apis-part-3/]]
-
-***
-
-<p align="center">[[« Part 19. The cryptography helpers|The cryptography helpers]]&nbsp;&nbsp;—&nbsp;&nbsp;[[Documentation overview|Documentation]]&nbsp;&nbsp;—&nbsp;&nbsp;[[Part 21. Extending Serialization with Converters »|Extending Serialization with Converters]]</p>
+# More Info
+* [Nancy and Content Negotiation](http://www.philliphaydon.com/2012/11/08/nancy-and-content-negotiation/)
+* [Revisting Content Negotiation and APIs part 1](http://www.philliphaydon.com/2013/04/22/nancyfx-revisiting-content-negotiation-and-apis-part-1/)
+* [Revisting Content Negotiation and APIs part 2](http://www.philliphaydon.com/2013/05/09/nancyfx-revisiting-content-negotiation-and-apis-part-2/)
+* [Revisting Content Negotiation and APIs part 3](http://www.philliphaydon.com/2013/05/20/nancyfx-revisiting-content-negotiation-and-apis-part-3/)

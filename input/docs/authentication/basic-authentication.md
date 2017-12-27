@@ -1,3 +1,5 @@
+Order: 4
+---
 This document provides an overview on how to enable basic authentication in your Nancy application. For a full working sample, please refer to the `Nancy.Demo.Authentication.Basic` project in the Nancy solution.
 
 To enable basic authentication in your application, you need to complete the following steps
@@ -7,7 +9,7 @@ To enable basic authentication in your application, you need to complete the fol
 1. Configure and enable Basic Authentication
 1. Securing your modules/routes
 
-## The user mapper
+# The user mapper
 
 The user mapper is responsible for mapping a user from an identifier.
 
@@ -34,7 +36,7 @@ public interface IUserMapper
 
 A single method whose sole responsibility is to take the GUID identifier and return the corresponding user. If the identifier could not be mapped to a user then `null` should be returned. For more information about the `IUserIdentity` interface, refer to the [Authentication overview](Authentication overview).
 
-## Modifying your application to handle basic authentication
+# Modifying your application to handle basic authentication
 
 Once you have the required package installed, it is time to enable basic authentication, by hooking it up to the [application pipeline](The Application Before, After and OnError pipelines) in your [bootstrapper](Bootstrapper).
 
@@ -60,7 +62,7 @@ The `EnableBasicAuthentication` extension method expects an instance of the `Bas
 - A string representing the name of the authentication `realm`
 - A `UserPromptBehaviour` enum value to control when the browser should prompt the user for credentials, the default value is `NonAjax` (see below for full list of available options)
 
-## The UserPromptBehaviour enum
+# The UserPromptBehaviour enum
 
 To control when the user should be prompted for credentials. One of the following values are valid
 
@@ -70,10 +72,6 @@ To control when the user should be prompted for credentials. One of the followin
 |Always|Always present user with login prompt|
 |NonAjax|Only prompt the user for credentials on non-ajax requests|
 
-## Securing your routes / modules
+# Securing your routes / modules
 
 Once everything is wired up, it is time to secure your modules or individual routes. For a more indepth overview, please read [securing your resources](Authentication-overview#securing-your-resources)
-
-***
-
-<p align="center">[[« Part 22. Forms Authentication|Forms Authentication]]&nbsp;&nbsp;—&nbsp;&nbsp;[[Documentation overview|Documentation]]&nbsp;&nbsp;—&nbsp;&nbsp;[[Part 23. SSL Behind Proxy »|SSL Behind Proxy]]</p>

@@ -1,4 +1,6 @@
-**Note: Requires OWIN host. More information on it can be found at [Hosting Nancy with OWIN](Hosting-nancy-with-owin)**
+Title: Web Sockets In Nancy Using OWIN
+---
+**Note: Requires OWIN host. More information on it can be found at [Hosting Nancy with OWIN](/docs/hosting/hosting-nancy-with-owin)**
 
 This is based on [Owin WebSocket Extensions v0.4.0](http://owin.org/extensions/owin-WebSocket-Extension-v0.4.0.htm).
 

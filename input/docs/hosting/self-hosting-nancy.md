@@ -1,3 +1,5 @@
+Order: 9
+---
 With the [`Nancy.Hosting.Self`](https://nuget.org/packages/Nancy.Hosting.Self) NuGet package you can self-host Nancy in, for example, console application or embedded in your desktop or windows service application.
 
 After you have installed the package, create an instance of the `NancyHost` class and call the `Start` method.
@@ -11,7 +13,7 @@ After you have installed the package, create an instance of the `NancyHost` clas
 
 `NancyHost` implements the `IDisposable` interface and will automatically call the `Stop` method on the host when the application is closing. If you need more control over when the host is started and stopped, simply create an instance, without the using-statement, and explicitly call `Start()` and `Stop()` as needed.
 
-## Host Configuration
+# Host Configuration
 
 When creating an instance of `NancyHost` you have the ability to pass in a configuration object to customize the behavior of your host. 
 
@@ -33,7 +35,7 @@ Property|Description|Default
 CreateAutomatically|Value indicating whether url reservations are automatically created when necessary|false
 User|Value for the user to use to create the url reservations for|The `Everyone` group
 
-## Namespace Reservations
+# Namespace Reservations
 
 Windows requires applications to register the part of the HTTP URL namespace, that they will be, listening on, or for the application to run with administrator privileges. This is how the MSDN documentation describes the requirement
 
@@ -71,5 +73,5 @@ Another way to resolve **Namespace Reservation** is to use a `HostConfiguration 
       var host = new NancyHost(hostConfigs, uri);
             host.Start();
 
-## Connection Management
+# Connection Management
 Self host provides connection management via the HostConfiguration.MaximumConnectionCount property. By default this is set to one half of the logical core count (to maintain connections only on actual core threads and not the hyperthreaded count.) You may change this value and experiment with it to your needs. A general rule of thumb for this is that a higher value will mean more connections can be maintained at a slower average response time; while fewer connections will be rejected. Alternatively, lower values will result in fewer connections, yet will be maintained at a faster average response time.

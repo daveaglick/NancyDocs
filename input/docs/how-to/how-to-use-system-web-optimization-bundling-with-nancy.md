@@ -1,3 +1,5 @@
+Title: How To Use System.Web.Optimization Bundling With Nancy
+---
 **Note:** Microsoft.AspNet.Web.Optimization requires HttpContext, which is not available with self hosting.
  
 1. **IF** you are using Nancy with **OWIN**, make sure you use

@@ -1,5 +1,6 @@
-# Configuring your application
-
+Title: Configuration API Draft
+ShowInSidebar: false
+---
 - [Overview](#overview)
   - [Introducing the configuration environment](#introducing-the-configuration-environment)
   - [Defining the configuration of your application](#defining-the-configuration-of-your-application)
@@ -15,7 +16,7 @@
   - [Controlling the configuration of an environment](#controlling-the-configuration-of-an-environment)
   - [Controlling the creation of an environment](#controlling-the-creation-of-an-environment)
 
-## Overview
+# Overview
 
 As of Nancy `2.x` there is a new configuration system in place. The purpose of this system is to provide a unified configuration story for both Nancy and user-written functionality. It has been designed to be both lightweight and extensible, while still encouraging a set of best practices. The core of
 this system is located in the new `Nancy.Configuration` namespace.
@@ -24,7 +25,7 @@ Configuration objects do not share any common base class or interface, but inste
 
 The system is designed to be setup once, during application startup, and will be called by the `INancyBootstrapper.Initialise` method.
 
-### Introducing the configuration environment
+## Introducing the configuration environment
 
 At the heart of the configuration system we find the `INancyEnvironment` interface. It defines the symmetric pair of base operations, for storing and retrieving configuration objects inside a Nancy application.
 
@@ -62,11 +63,11 @@ We _highly recommend_ that the used keys are well documented as they are require
 
 By default, Nancy will always store its own configuration objects, using the _full type name_ of the object. We do this by making use of the `AddValue<T>` and `GetValue<T>()` extension methods as documented below. This enable use to add and retrieve any values without having to bother with _magic string_ values, and means we are less likely to break any user code if we refactor any code.
 
-### Getting a hold of an INancyEnvironment instance
+## Getting a hold of an INancyEnvironment instance
 
 Once the environment has been configured, during application startup, it will be registered in the available container. To get an instance of the current `INancyEnvironment` instance all you have to do it take a constructor dependency on it.
 
-### INancyEnvironment extension methods
+## INancyEnvironment extension methods
 
 To make life a bit simpler, Nancy provides a series of extension methods on `INancyEnvironment`. These extensions exist to help make it easier to work with configuration objects.
 
@@ -78,7 +79,7 @@ To make life a bit simpler, Nancy provides a series of extension methods on `INa
 |`T GetValueWithDefault<T>(T defaultValue)`|Gets a value from the environment, using the full name of the type defined by `T` as the key. If the value could not be found, then `defaultValue` is returned|
 |`T GetValueWithDefault<T>(string key, T defaultValue)`|Gets a value from the environment, using the provided `key`. If the value could not be found, then `defaultValue` is returned|
 
-## Defining the configuration of your application
+# Defining the configuration of your application
 
 Each [NancyBootstrapperBase]() implementations contains a method with the signature `Configure(INancyEnvironment environment)`. By overriding this method, in your own bootstrapper, you can gain access to the `INancyEnvironment` and define the configuration of your application.
 
@@ -105,11 +106,11 @@ public override void Configure(INancyEnvironment environment)
 
 The sample configures `Diagnostics` and `Tracing` as well as a custom `MyConfig`. The configuration methods are defined as extension methods on the `INancyEnvironment` interface and provides whatever overloads that are necessary for each set of configuration.
 
-## Accessing the environment from outside of Nancy
+# Accessing the environment from outside of Nancy
 
 Where ever you have access to an `INancyBootstrapper` instance (most likely from outside of Nancy, such in hosting environments and the likes) you can get access to the `INancyEnvironment` through the [INancyBootstrapper.GetEnvironment()](https://github.com/NancyFx/Nancy/blob/45238076ad0b7f6ecabd6bae8469e30458d02efe/src/Nancy/Bootstrapper/INancyBootstrapper.cs#L29) method.
 
-## Adding your own configuration
+# Adding your own configuration
 
 As earlier stated, the configuration system has been designed so that it can be leveraged by user code and third party extensions to Nancy. How you use it is really up to you, but we have been following a certain pattern for configurations provided by Nancy and we encourage you to consider them for your own configurations.
 
@@ -118,7 +119,7 @@ As earlier stated, the configuration system has been designed so that it can be 
 - There should always be a default value present even if the user has not explicitly provided any configuration
 - Use `INancyEnvironment` extension methods to provide an API for setting up the configuration object
 
-### Creating a configuration object
+## Creating a configuration object
 
 Creating your own configuration object to be used by the configuration system, could not be easier. You simply create a class that will hold the values you are interested in and what other API you deem fit for it to expose. That is it!
 
@@ -136,7 +137,7 @@ public class MyConfig
 }
 ```
 
-### Creating environment extensions
+## Creating environment extensions
 
 Once you have defined your configuration object, it is time to define the API methods that users will be using to create, and add, an instance of it to the `INancyEnvironment`.
 
@@ -189,7 +190,7 @@ public static class MyConfigExtensions
 
 By making `amount` nullable, we can detect that the value was omitted and provide our own default value instead. All usages of default values should be well documented so that your users will know what will be used if they omit to provide their own value for optional parameters.
 
-### Providing default configurations
+## Providing default configurations
 
 What if the user does not explicitly provide any configuration value for your configuration object? There are several ways in which this could be handled
 
@@ -273,11 +274,11 @@ public class DatabaseConfigurationProvider : NancyDefaultConfigurationProvider<D
 
 As with everything else in Nancy, both `INancyDefaultEnvironmentProvider` and `NancyDefaultConfigurationProvider<T>` are registered in the application container and thus can make use of constructor dependencies of their own.
 
-## Customizing the configuration system
+# Customizing the configuration system
 
 At the core level, Nancy is really only aware of two configuration interfaces; `INancyEnvironmentConfigurator` the `INancyEnvironment`. Everything else is extension points that have been added by the default implementations of each of these interfaces.
 
-### Controlling the configuration of an environment
+## Controlling the configuration of an environment
 
 The `INancyEnvironmentConfigurator` interface defines the functionality of a class that is responsible for handing off a configured `INancyEnvironment` instance to Nancy during `NancyBootstrapperBase.Initialise`.
 
@@ -314,7 +315,7 @@ protected override Func<ITypeCatalog, NancyInternalConfiguration> InternalConfig
 }
 ```
 
-### Controlling the creation of an environment
+## Controlling the creation of an environment
 
 The `DefaultNancyEnvironmentConfigurator` implementation introduces the `INancyEnvironmentFactory` interface, which is responsible for providing an `INancyEnvironment` implementation which is going to be configured and returned to Nancy.
 

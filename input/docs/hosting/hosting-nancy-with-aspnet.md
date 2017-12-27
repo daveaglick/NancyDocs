@@ -1,3 +1,6 @@
+Title: Hosting Nancy With ASP.NET
+Order: 1
+---
 # Quick Start
 
 Nancy under ASP.Net is handled through a HTTP Handler, which is setup through the Web.Config. If you're using one of Nancy's Visual Studio templates then the configuration is handled for you, if not then you'll need to add the following to the configuration section of your Web.Config:
@@ -36,7 +39,7 @@ One way to fix it is to remove the WebDAVModule in the web.config.
   </modules>  
 </system.webServer>
 ```
-## Bootstrapping
+# Bootstrapping
 
 By default, the Nancy HTTP Handler will use the built in "Bootstrapper Locator" for identifying the best bootstrapper to kick-start Nancy. This behaviour should be fine for most scenarios; but if you want to take control over which bootstrapper is used, you can do so using the Web.Config:
 
@@ -50,9 +53,9 @@ By default, the Nancy HTTP Handler will use the built in "Bootstrapper Locator" 
 ```
 Here we define a NancyFx configuration section and a bootstrapper entry that specified the type of the bootstrapper, and the assembly it's located in. If this configuration setting is specified then the locator is bypassed completely and Nancy will use the specified type instead. 
 
-For more information on Nancy Bootstrapping please see [[Bootstrapping-Nancy]].
+For more information on Nancy Bootstrapping please see [Bootstrapping Nancy](/docs/bootstrappers/bootstrapping-nancy).
 
-## Controlling output buffering
+# Controlling output buffering
 The NancyFX configuration section also enables you to control if output buffering should be disabled or not. This is done with the `DisableOutputBuffering` element, that can have a value of either `true` (output buffering is disabled) or `false` (output buffering will remain enabled - this is the default value).
 
 ```xml
@@ -64,7 +67,7 @@ The NancyFX configuration section also enables you to control if output bufferin
 </nancyFx>
 ```
 
-## Adding Nancy to an existing site
+# Adding Nancy to an existing site
 
 Sometimes you have an existing ASP.NET site and you want to configure Nancy to handle requests to a particular path. To do this, follow the instructions above but set `path="nancypath/*"` on the `NancyHttpRequestHandler` handlers. You will also need to add a project folder to represent the path, and in that folder you would add the following Web.config:
 
@@ -100,7 +103,7 @@ Alternatively, enclose the setting within `<location>` in your root web.config:
 ```
 Note that your modules will still respond to the full path including the location, ie ["/nancy/.."]
 
-## Adding Nancy to an existing ASP.Net MVC site
+# Adding Nancy to an existing ASP.Net MVC site
 
 Follow all the instructions above but make sure to remove the "nancy" path from the RoutingTable (full story [read here](http://igorshare.wordpress.com/2012/04/08/adding-nancy-to-the-existing-asp-net-mvc-site/)).
 Add the following instruction to the Global.asax.cs file inside the MvcApplication.RegisterRoutes:
@@ -133,7 +136,7 @@ public class Home : NancyModule
 }
 ```
 
-## Prevent IIS from taking over errors
+# Prevent IIS from taking over errors
 
 This is added by default since 0.22.
 

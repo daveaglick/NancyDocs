@@ -1,5 +1,3 @@
-# Nancy and FluentValidation
-
 You can install the FluentValidation from the [NuGet packages](https://www.nuget.org/packages/Nancy.Validation.FluentValidation/):
 
     Install-Package Nancy.Validation.FluentValidation
@@ -88,7 +86,7 @@ This will return the error status code and it will return a diagnostic error mes
 
 For more information on validation rules, you can read about the [FluentValidation library](https://github.com/JeremySkinner/FluentValidation).
 
-## Assembly Scanning
+# Assembly Scanning
 
 If your validation types are not located in your main web app assembly, you will see that your input data is not validated. You have a couple of options in this case. The easiest way to do this is to. Firstly, you can add this to your Properties.cs file in your validation assembly:
 
@@ -108,7 +106,7 @@ public class Bootstrap : DefaultNancyBootstrapper
 }
 ```
 
-## Unit testing validation 
+# Unit testing validation 
 
 Because NancyFX detects and instantiates validation classes automatically, there may be no explicit references in code to `Nancy.Validation.FluentValidation`, and so the build process used by some tools and test runners may 
 omit this assembly when building your unit test project. If this happens, your unit tests will fail with an exception
@@ -118,7 +116,3 @@ omit this assembly when building your unit test project. If this happens, your u
 > one of the Nancy.Validation packages.
  
 You may need to explicitly copy all referenced assemblies to the output folder when building your test project. In NCrunch, this is the "Copy referenced assemblies to workspace" option in the project settings.
-
-***
-
-<p align="center">[[« Part 23. SSL Behind Proxy|SSL Behind Proxy]]&nbsp;&nbsp;—&nbsp;&nbsp;[[Documentation overview|Documentation]]</p>

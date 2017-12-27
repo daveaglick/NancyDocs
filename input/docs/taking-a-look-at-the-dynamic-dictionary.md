@@ -1,3 +1,7 @@
+Title: Taking A Look At The DynamicDictionary
+Order: 30
+---
+
 The `DynamicDictionary` is a dynamic type with dictionary-like behaviors, but there is a lot more to it under the covers and it's a big part of what helps Nancy provide a terse syntax in many places. The most obvious place is in the lambda expression that forms the route action. Any captured values from the request will be put into a DynamicDictionary and passed into the action for the route.
 
 With the DynamicDictionary you are able to access the values using a standard indexer approach or by using the name of the captured value just as a normal property. Both produce the same result; it all comes down to personal preference.
@@ -27,5 +31,3 @@ Get["/hello/{name}"] = parameters => {
 ```
 
 The stored values can explicitly or implicitly be cast to most of the primitive types and a special property, called `HasValue` can be checked to determine if a value has been assigned or not. The values also implement the `IEquatable<>` and `IConvertible` interfaces.
-
-<p align="center">[[« Part 4. Async|Async]]&nbsp;&nbsp;—&nbsp;&nbsp;[[Documentation overview|Documentation]]&nbsp;&nbsp;—&nbsp;&nbsp;[[Part 6. The before and after module hooks »|The before and after module hooks]]</p>

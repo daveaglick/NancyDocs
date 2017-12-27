@@ -1,14 +1,18 @@
+Order: 5
+---
 # Deprecation Notice
 
-:warning: Token Authentication has been deprecated as of v2.0. (see [`050eca2`](https://github.com/NancyFx/Nancy/commit/050eca2bf95efd32b4d4858900f9f729f520b152)). It's recommended to use middleware to handle token authentication instead. :warning:
+:::{.alert .alert-warning}
+Token Authentication has been deprecated as of v2.0. (see [`050eca2`](https://github.com/NancyFx/Nancy/commit/050eca2bf95efd32b4d4858900f9f729f520b152)). It's recommended to use middleware to handle token authentication instead.
+:::
 
 This document provides an overview on how to enable token authentication in your Nancy application. For a full working sample, please refer to the `Nancy.Demo.Authentication.Token` project in the Nancy solution.
 
-# # Meet Nancy Token Authentication
+# Meet Nancy Token Authentication
 
 The Nancy.Authentication.Token project was built for use by heterogeneous clients (iOS apps, Android apps, Angular SPA apps, etc.) that all communicate with the same back-end Nancy application.
 
-## Rationale
+# Rationale
 
 Token authentication and authorization was built with the following requirements:
 
@@ -19,9 +23,9 @@ Token authentication and authorization was built with the following requirements
 * Use server side keys for token hash generation with a configurable key expiration interval
 * Use file system storage of server-side token generation private keys to allow keys to survive an application restart or an app pool recycle. Note: an "in memory" option is available primarily for testing, but could be used in a situation where expiring all user sessions on an application restart is acceptable behavior.
 
-## Usage
+# Usage
 
-### Nancy Configuration
+## Nancy Configuration
 
 Token Authentication can be wired up in a simliar fashion to other available forms of Nancy authentication.
 
@@ -93,11 +97,11 @@ The following code shows an example of how you can perform the initial user auth
         }
     }
 ```
-### Sensible Defaults
+## Sensible Defaults
 While you can provide your own implementation of `ITokenizer`, the default implementation is highly configureable, though the default implementation (`Tokenizer`) comes with sensible defaults. For example, by default the items to be included in your generated token are delimited using `Environment.NewLine` by default. This can be configured when you create an instance of a `Tokenizer` by calling the configuration method `ItemDelimiter` and specifying your own delimiter value. See the source code for other configurable options: https://github.com/NancyFx/Nancy/blob/master/src/Nancy.Authentication.Token/Tokenizer.cs
 
 
-### Client Configuration
+## Client Configuration
 
 Once your client has received a token, it must send the token as an HTTP header with each subsequent request.
 
@@ -105,7 +109,7 @@ Once your client has received a token, it must send the token as an HTTP header 
 Authorization: Token [your token goes here] (without square brackets)
 ``` 
 
-## Under the Covers
+# Under the Covers
 
 If you're seeking a deeper understanding of how Nancy.Authentication.Token works and the theory behind it, then this section is for you.
 
@@ -115,8 +119,6 @@ In a critical situation, you can expire the keys which will cause all tokens gen
 
 If users of this project are interested in an optional server token store, or username "blacklist" for expiring users or forcing a re-login, then please leave a comment on the original commit for this project: [https://github.com/NancyFx/Nancy/commit/9ae0a5494bc335c3d940d730ae5d5f18c1018836](https://github.com/NancyFx/Nancy/commit/9ae0a5494bc335c3d940d730ae5d5f18c1018836)
 
-## Contributors
+# Contributors
 
 Nancy.Authentication.Token was originally created by the crack development team at [Lotpath](http://lotpath.com) ([Lotpath on github](http://github.com/Lotpath)).
-
-[<< Part 22. Forms](Forms Authentication) - [Documentation overview](Documentation) - [Part 23. SSL Behind Proxy >>](SSL Behind Proxy)
