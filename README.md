@@ -20,7 +20,7 @@ The following Cake targets are defined:
 All of the targets that deal with the API are smart enough not to duplicate work. That is, if the source code for a given tag has already been downloaded it will not be downloaded again. However, there are times when you may want to run the task even if the job has already been performed such as when the layout files change and you want to regenerate API documentation. Additionally, you may want to only perform the task for a specific tag and not all tags. These options can be controlled with the `tag` and `force` arguments:
 
 ```
-build -Target UploadApi -ScriptArgs '-tag=v0.7.0 -force=true'
+build -Target UploadApi -ScriptArgs '-tag=v2.0.0-clinteastwood -force=true'
 ```
 
 # Folder Structure

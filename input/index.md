@@ -25,7 +25,7 @@ NoGutter: true
                     <ul id="navigation">
                         <li><a href="http://blog.nancyfx.org/" target="_blank">Blog</a></li>
                         <li><a href="https://github.com/NancyFx" target="_blank">Source Code</a></li>
-                        <li><a href="https://github.com/NancyFx/Nancy/wiki/Documentation" target="_blank">Documentation</a></li>
+                        <li><a href="/docs">Documentation</a></li>
                         <li><a href="mvm.html">MVM Program</a></li>
                         <li><a href="https://slack.nancyfx.org/" target="_blank">Chat</a></li>
                         <li><a href="http://nancyfx.org/contribs.html">Contributors</a></li>
@@ -37,7 +37,9 @@ NoGutter: true
 	</div>
 </div>
 
-:::{.container}
+<div class="container">
+<div class="row">
+<div class="col-md-6">
 
 # Documentation
 
@@ -97,4 +99,30 @@ You can also follow the discussion on Twitter using the [#NancyFx](http://twitte
 * Coding styles (+ ReSharper file and test naming)
 * SharedAssemblyInfo.cs / Breaking all your projects on commit ;-)
 
-:::
+</div>
+<div class="col-md-6">
+
+# API Documentation
+
+**[Latest](/api)**
+
+<span id="versions" />
+
+</div>
+</div>
+</div>
+
+<script>
+    (function() {
+    $.ajax({
+        url: "/versions.json",
+        type: "GET",
+        dataType: "json",
+        success: function( data ) {
+            $.each(data, function( i, item ) {
+                $("#versions").append('<p><a href="/api/' + item + '">' + item + '</a></p>');
+            });
+        }
+        })
+    })();
+</script> 

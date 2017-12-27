@@ -169,7 +169,7 @@ Task("BuildApi")
             //    }
             //});            
 
-            // Can remove once new version out
+            // Can remove once new version of Wyam is out
             StartProcess("../Wyam/src/clients/Wyam/bin/Debug/net462/wyam.exe",
                 "-a \"../Wyam/src/**/bin/Debug/**/*.dll\" -r \"docs -i\" -t \"../Wyam/themes/Docs/Samson\""
                 + $" --setting SourceFiles=\"{MakeAbsolute(releaseDir).ToString()}/*/src/{{*,!*.Tests}}/**/*.cs\""
@@ -234,12 +234,16 @@ Task("BuildDocs")
     .Does(() =>
     {
         // Build the docs
-        Wyam(new WyamSettings
-        {
-            Recipe = "Docs",
-            Theme = "Samson",
-            UpdatePackages = true
-        });
+        //Wyam(new WyamSettings
+        //{
+        //    Recipe = "Docs",
+        //    Theme = "Samson",
+        //    UpdatePackages = true
+        //});
+        
+        // Can remove once new version of Wyam is out
+        StartProcess("../Wyam/src/clients/Wyam/bin/Debug/net462/wyam.exe",
+            "-a \"../Wyam/src/**/bin/Debug/**/*.dll\" -r \"docs -i\" -t \"../Wyam/themes/Docs/Samson\"");
 
         // Create the versions JSON file
         FileWriteText(outputDir + File("versions.json"), "[" + string.Join(",", allTags.Select(x => "\"" + x.Name + "\"")) + "]");

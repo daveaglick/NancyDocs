@@ -6,7 +6,7 @@
 
 <script>
     (function() {    
-    var versionRegex = /(\/api\/(.*?)\/)/;
+    var versionRegex = /(\/api\/(.*?)(\/|$))/;
     var currentVersion = versionRegex.exec(window.location.href)[2];
     $('#versions').change(function () {
         window.location = window.location.href.replace(versionRegex, '/api/' + $('#versions').find(":selected").text() + '/');
