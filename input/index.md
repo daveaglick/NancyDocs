@@ -26,9 +26,9 @@ NoGutter: true
                         <li><a href="http://blog.nancyfx.org/" target="_blank">Blog</a></li>
                         <li><a href="https://github.com/NancyFx" target="_blank">Source Code</a></li>
                         <li><a href="/docs">Documentation</a></li>
-                        <li><a href="mvm.html">MVM Program</a></li>
+                        <li><a href="/mvm">MVM Program</a></li>
                         <li><a href="https://slack.nancyfx.org/" target="_blank">Chat</a></li>
-                        <li><a href="http://nancyfx.org/contribs.html">Contributors</a></li>
+                        <li><a href="/contribs">Contributors</a></li>
                         <li><a href="http://nancyfx.spreadshirt.net/" target="_blank">Swag<sup>[EU]</sup></a> / <a href="http://nancyfx.spreadshirt.com/" target="_blank">Swag<sup>[US]</sup></a></li>
                     </ul>
                 </div>

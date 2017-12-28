@@ -1,0 +1,59 @@
+Title: Contributors
+ShowInNavbar: false
+---
+<div id="contributors">
+</div>
+
+<script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.min.js"></script>
+
+<script type="text/javascript">
+  // Grabs the contributors from the Github API
+  // if you steal this code you need to buy @@Grumpydev and @@TheCodeJunkie
+  // beer and/or cake ;-)
+  // http://pledgie.com/campaigns/17251
+  function getContribs(page, contribs) {
+    $.ajax({
+        url: 'https://api.github.com/repos/NancyFx/Nancy/contributors?per_page=100&page=' + page,
+        dataType: 'jsonp',
+        success: function(result) {
+          var currentPage = page;
+          var currentContribs = contribs;
+          
+          if (!result.data || !result.data.length || result.data.length === 0) {
+            bindContribs(currentContribs);
+          } else {
+            getContribs(currentPage + 1, currentContribs.concat(result.data));
+          }
+        }
+    });
+  }
+  
+  function bindContribs(currentContribs) {
+    var contributors = currentContribs.sort(function (a, b) { 
+      if (a.contributions > b.contributions) return -1;
+      if (a.contributions < b.contributions) return 1;
+      return 0;
+    });
+          
+    $("#contributorTemplate").tmpl({ data: contributors}).appendTo("#contributors");
+  }
+  
+  $(function() {
+    getContribs(1, []);
+  });
+  </script>
+
+  <script id="contributorTemplate" type="text/x-jQuery-tmpl">
+    {{each data}}
+      {{if login != "invalid-email-address"}}  
+        <div style="clear: both; padding-top: 8px;">
+            <img src="${avatar_url}" alt="${name || login}" style="float:left; width:80px;" />
+            <div style="float:left; margin-left: 12px;">
+              <div><strong>#${$index + 1} (<a href="https://github.com/NancyFx/Nancy/commits/master?author=${login}">${contributions} commits</a>)</strong></div>
+              <div><strong>${name ? name.replace(" ", " '" + login + "' ") + "!" : login}</strong></div>
+              <div><a href="https://github.com/${login}">https://github.com/${login}</a></div>
+            </div>
+        </div>
+      {{/if}}
+    {{/each}}
+  </script>
