@@ -1,4 +1,5 @@
-// The following environment variables need to be set for Publish target:
+// The following environment variables need to be set:
+// NANCY_GITHUB_TOKEN
 // NANCY_NETLIFY_TOKEN
 
 #tool "nuget:https://api.nuget.org/v3/index.json?package=Wyam&version=1.1.0"
@@ -70,7 +71,11 @@ Task("GetTags")
     {
         // For some reason the Nancy repo isn't returning all versions via releases API
         // so we have to get them via tags - thankfully only releases are tagged
-        GitHubClient github = new GitHubClient(new ProductHeaderValue("NancyDocs"));
+        var githubToken = EnvironmentVariable("NANCY_GITHUB_TOKEN");
+        GitHubClient github = new GitHubClient(new ProductHeaderValue("NancyDocs"))
+        {
+            Credentials = new Credentials(githubToken)
+        };
         if (!string.IsNullOrEmpty(accessToken))
         {
             github.Credentials = new Credentials(accessToken);
